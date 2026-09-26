@@ -1401,8 +1401,8 @@ def analyze_screen():
         g_channel = full_array[:, :, 1] / 255.0  
         b_channel = full_array[:, :, 2] / 255.0
         
-        luma_bt709 = 0.2126 * r_channel + 0.7152 * g_channel + 0.0722 * b_channel
-        luma_array = luma_bt709.flatten()
+        luma_equal = (r_channel + g_channel + b_channel) / 3.0
+        luma_array = luma_equal.flatten()
         luma = np.mean(luma_array)
         contrast = np.std(luma_array)
         
@@ -1471,17 +1471,16 @@ def check_screen_luma():
             screen = ImageGrab.grab(bbox=bbox).convert('RGB')
             img_array = np.array(screen)
             
-            # Calculate proper luma from RGB using multiple methods for accuracy
-            # Method 1: ITU-R BT.709 standard (most accurate for video)
+            # Calculate proper luma from RGB using equal channel weighting
             r_channel = img_array[:, :, 0] / 255.0
             g_channel = img_array[:, :, 1] / 255.0  
             b_channel = img_array[:, :, 2] / 255.0
             
-            # BT.709 luma: 0.2126*R + 0.7152*G + 0.0722*B
-            luma_bt709 = 0.2126 * r_channel + 0.7152 * g_channel + 0.0722 * b_channel
+            # Equal weighting: (R + G + B) / 3
+            luma_equal = (r_channel + g_channel + b_channel) / 3.0
             
-            # Use BT.709 as primary (most accurate for video content)
-            luma_array = luma_bt709
+            # Use equal weighting for all channels
+            luma_array = luma_equal
             luma = np.mean(luma_array)
             
             # No scaling factor - BT.709 should give correct 0-1 range directly

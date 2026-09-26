@@ -73,7 +73,7 @@
     "UPPER_MID": {
       "gamma": 1.0,
       "contrast": 1.0,
-      "brightness": 0.8999999999999999
+      "brightness": 1.0
     },
     "LOWER_BRIGHT_MID": {
       "gamma": 1.0,

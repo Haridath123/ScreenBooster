@@ -31,7 +31,7 @@ class ScreenBoosterBuilder:
         self.release_dir = self.project_dir / "release"
         
         # Build configuration
-        self.app_name = "ScreenBoosterV5"
+        self.app_name = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
         self.main_script = "main.py"
         self.config_files = [
             "screenbooster_profiles.json",
@@ -346,7 +346,7 @@ Built: {version_info['build_date']}
 Version: {version_info['version']}
 """
         
-        with open(self.release_dir / "QUICK_START.md", 'w') as f:
+        with open(self.release_dir / "QUICK_START.md", 'w', encoding='utf-8') as f:
             f.write(quick_start)
         
         print("✅ Release package created")

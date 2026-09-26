@@ -1,8 +1,8 @@
-# ScreenBooster V5 - Comprehensive Technical Reference
+# ScreenBooster V7 - Comprehensive Technical Reference
 
 ## 🎯 Complete Technical Documentation
 
-This document provides minute intricate details about ScreenBooster V5 for AI context and deep technical understanding. Every component, algorithm, parameter, and system is documented in detail.
+This document provides minute intricate details about ScreenBooster V7 for AI context and deep technical understanding. Every component, algorithm, parameter, and system is documented in detail.
 
 ---
 
@@ -27,7 +27,7 @@ This document provides minute intricate details about ScreenBooster V5 for AI co
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    ScreenBooster V5                         │
+│                    ScreenBooster V7                         │
 ├─────────────────────────────────────────────────────────────┤
 │                                                               │
 │  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
@@ -133,40 +133,18 @@ full_array = np.array(analysis_screen)
 **Performance Optimizations**:
 - 4x downscaling from 1920x1080 to 960x540
 - LANCZOS resampling for quality
-- Region-based sampling instead of full image analysis
 - Frame skipping support (SKIP_FRAMES parameter)
 
 ### 2. Region Sampling System
 
-**15 Sample Regions** (defined in analyze_screen):
-```python
-sample_ratios = [
-    (0.4, 0.4, 0.6, 0.6),    # Center (20% of screen)
-    (0.01, 0.01, 0.08, 0.08),   # Top-left corner
-    (0.92, 0.01, 0.99, 0.08),   # Top-right corner
-    (0.01, 0.92, 0.08, 0.99),   # Bottom-left corner
-    (0.92, 0.92, 0.99, 0.99),   # Bottom-right corner
-    (0.46, 0.01, 0.54, 0.08),   # Top-center
-    (0.46, 0.92, 0.54, 0.99),   # Bottom-center
-    (0.01, 0.46, 0.08, 0.54),   # Left-center
-    (0.92, 0.46, 0.99, 0.54),   # Right-center
-    (0.3, 0.45, 0.38, 0.55),    # Center-left
-    (0.62, 0.45, 0.7, 0.55),    # Center-right
-    (0.22, 0.22, 0.28, 0.28),   # Top-left quadrant
-    (0.72, 0.22, 0.78, 0.28),   # Top-right quadrant
-    (0.22, 0.72, 0.28, 0.78),   # Bottom-left quadrant
-    (0.72, 0.72, 0.78, 0.78),   # Bottom-right quadrant
-]
-```
-
-**Luma Calculation** (ITU-R BT.709 standard):
+**Luma Calculation** (Equal channel weighting):
 ```python
 r_channel = region_array[:, :, 0] / 255.0
 g_channel = region_array[:, :, 1] / 255.0
 b_channel = region_array[:, :, 2] / 255.0
 
-# BT.709 luma formula (most accurate for video content)
-luma_bt709 = 0.2126 * r_channel + 0.7152 * g_channel + 0.0722 * b_channel
+# Equal weighting formula (R + G + B) / 3
+luma_equal = (r_channel + g_channel + b_channel) / 3.0
 ```
 
 ### 3. Scene Detection System
@@ -198,23 +176,7 @@ luma_bt709 = 0.2126 * r_channel + 0.7152 * g_channel + 0.0722 * b_channel
 22. BRIGHT (luma < 0.84)
 23. VERY_BRIGHT (luma >= 0.84)
 
-**Advanced Scene Detection** (get_scene_type function):
-```python
-def get_scene_type(luma, highlight_ratio, bright_in_dark=False, 
-                  overall_bright=False, high_contrast=False, 
-                  dark_with_highlights=False):
-    """
-    Advanced scene detection with special scenario handling
-    
-    Priority 1: Special scenarios
-    - bright_in_dark: Fireball/explosion scenarios
-    - overall_bright: Everything is bright
-    - high_contrast: Mixed lighting
-    - dark_with_highlights: Dark with bright spots
-    
-    Priority 2: Fallback to 23-scene system
-    """
-```
+
 
 ### 4. Profile System
 
@@ -268,7 +230,7 @@ def apply_settings(gamma, contrast, brightness=1.0):
         # Apply contrast (linear method)
         if contrast != 1.0:
             contrast_adjusted = (gamma_corrected - 0.5) * contrast + 0.5
-            gamma_corrected = max(0.0, min(1.0, contrast_adjusted))
+            1_corrected = max(0.0, min(1.0, contrast_adjusted))
             
             # Highlight boost for very bright areas
             if gamma_corrected > 0.7:
@@ -1262,7 +1224,7 @@ a = Analysis(
 
 exe = EXE(
     pyz, a.scripts, a.binaries, a.zipfiles, a.datas, [],
-    name='ScreenBoosterV5',
+    name='ScreenBoosterV7',  # Uses folder name
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -1326,7 +1288,7 @@ with open(manifest_file, 'w', encoding='utf-8') as f:
 **Generated Release Directory**:
 ```
 release/
-├── ScreenBoosterV5.exe           # Main executable (~25MB)
+├── ScreenBoosterV7.exe           # Main executable (~25MB)
 ├── screenbooster_profiles.json   # Profile settings
 ├── screenbooster_config.json     # Configuration
 ├── README.md                     # Complete documentation
@@ -1404,13 +1366,13 @@ def clean_build_environment(self):
 ### Project Directory Structure
 
 ```
-ScreenBoosterV5/
-├── main.py                          # Core application (1,411 lines)
-├── build_exe.py                     # One-click EXE builder (391 lines)
+ScreenBoosterV7/
+├── main.py                          # Core application (1,676 lines)
+├── build_exe.py                     # One-click EXE builder (439 lines)
 ├── requirements.txt                  # Python dependencies
-├── screenbooster_profiles.json      # Profile settings (227 lines)
-├── screenbooster_config.json        # Configuration (15 lines)
-├── ScreenBoosterV5.spec             # PyInstaller spec file
+├── screenbooster_profiles.json      # Profile settings
+├── screenbooster_config.json        # Configuration
+├── ScreenBoosterV7.spec             # PyInstaller spec file
 ├── main.spec                        # Alternative spec file
 ├── build.bat                        # Windows batch build script
 ├── build.ps1                        # PowerShell build script
@@ -1517,7 +1479,7 @@ cx_Freeze>=6.15.0
 - **Analysis Regions**: 15 sample regions per frame
 
 **Luma Calculation**:
-- **Standard**: ITU-R BT.709 (0.2126*R + 0.7152*G + 0.0722*B)
+- **Standard**: Equal channel weighting ((R + G + B) / 3)
 - **Precision**: 32-bit floating point
 - **Range**: 0.0 to 1.0 (normalized)
 - **Resolution**: 960x540 pixels (downsampled)
@@ -1660,7 +1622,7 @@ except Exception as e:
 
 ## 🔚 Conclusion
 
-This comprehensive technical reference provides complete documentation of ScreenBooster V5's architecture, algorithms, configuration parameters, and implementation details. Every component has been documented with minute intricate details suitable for AI context and deep technical understanding.
+This comprehensive technical reference provides complete documentation of ScreenBooster V7's architecture, algorithms, configuration parameters, and implementation details. Every component has been documented with minute intricate details suitable for AI context and deep technical understanding.
 
 **Key Technical Highlights**:
 - 23-scene intelligent detection system
@@ -1677,6 +1639,6 @@ This comprehensive technical reference provides complete documentation of Screen
 - BUILD_GUIDE.md - Build system documentation
 - GITHUB_DESCRIPTION.md - User-facing documentation
 
-**Version**: ScreenBooster V5
+**Version**: ScreenBooster V7
 **Last Updated**: 2026-07-29
 **Documentation Status**: Complete
