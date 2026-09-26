@@ -1,0 +1,112 @@
+{
+  "VERY_DARK": {
+    "gamma": 3.1,
+    "contrast": 1.6,
+    "brightness": 1.0
+  },
+  "DARK": {
+    "gamma": 4.0,
+    "contrast": 1.9,
+    "brightness": 1.0
+  },
+  "LOWER_DARK": {
+    "gamma": 2.9,
+    "contrast": 1.9,
+    "brightness": 0.9
+  },
+  "MID_DARK": {
+    "gamma": 2.6,
+    "contrast": 1.8,
+    "brightness": 0.8
+  },
+  "UPPER_DARK": {
+    "gamma": 2.0,
+    "contrast": 1.5,
+    "brightness": 0.7
+  },
+  "LOWER_MID_DARK": {
+    "gamma": 2.6,
+    "contrast": 1.5,
+    "brightness": 0.8
+  },
+  "MID_MID_DARK": {
+    "gamma": 2.4,
+    "contrast": 1.4,
+    "brightness": 0.75
+  },
+  "UPPER_MID_DARK": {
+    "gamma": 2.2,
+    "contrast": 1.3,
+    "brightness": 0.7
+  },
+  "LOWER_MID": {
+    "gamma": 1.6,
+    "contrast": 1.3,
+    "brightness": 0.9
+  },
+  "MID_LOWER_MID": {
+    "gamma": 1.8,
+    "contrast": 1.15,
+    "brightness": 0.9
+  },
+  "UPPER_LOWER_MID": {
+    "gamma": 1.6,
+    "contrast": 1.1,
+    "brightness": 0.95
+  },
+  "MID": {
+    "gamma": 1.1,
+    "contrast": 1.1,
+    "brightness": 1.0
+  },
+  "LOWER_UPPER_MID": {
+    "gamma": 1.3,
+    "contrast": 1.0,
+    "brightness": 1.0
+  },
+  "MID_UPPER_MID": {
+    "gamma": 1.2,
+    "contrast": 1,
+    "brightness": 1.0
+  },
+  "UPPER_MID": {
+    "gamma": 1.1,
+    "contrast": 1.0,
+    "brightness": 1.0
+  },
+  "LOWER_BRIGHT_MID": {
+    "gamma": 1.05,
+    "contrast": 1,
+    "brightness": 1
+  },
+  "MID_BRIGHT_MID": {
+    "gamma": 1.0,
+    "contrast": 1,
+    "brightness": 1
+  },
+  "UPPER_BRIGHT_MID": {
+    "gamma": 1.0,
+    "contrast": 1,
+    "brightness": 0.95
+  },
+  "LOWER_BRIGHT": {
+    "gamma": 1,
+    "contrast": 1,
+    "brightness": 1
+  },
+  "MID_BRIGHT": {
+    "gamma": 1,
+    "contrast": 1,
+    "brightness": 1,
+    "UPPER_BRIGHT": {
+      "gamma": 1,
+      "contrast": 1,
+      "brightness": 1
+    },
+    "BRIGHT": {
+      "gamma": 1,
+      "contrast": 1,
+      "brightness": 1
+    }
+  }
+}
