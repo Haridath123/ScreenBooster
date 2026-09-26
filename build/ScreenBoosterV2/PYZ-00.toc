@@ -1,4 +1,4 @@
-('C:\\Users\\Haridath\\Desktop\\Data\\ScreenBoosterV2\\build\\ScreenBoosterV2\\PYZ-00.pyz',
+('C:\\Users\\Haridath\\Desktop\\Data\\ScreenBoosterV3\\build\\ScreenBoosterV2\\PYZ-00.pyz',
  [('PIL',
    'C:\\Users\\Haridath\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PIL\\__init__.py',
    'PYMODULE'),

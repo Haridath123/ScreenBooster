@@ -17,7 +17,7 @@ build_exe_options = {
 # Setup configuration
 setup = {
     "name": "ScreenBooster",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "Dynamic screen brightness, contrast, and gamma adjustment",
     "author": "ScreenBooster Team",
     "options": {"build_exe": build_exe_options},

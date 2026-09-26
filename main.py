@@ -67,8 +67,8 @@ safety_key_combination = "ctrl+alt"  # Hold this to unlock
 last_safety_check = 0
 SAFETY_COOLDOWN = 0.1  # seconds between safety checks
 
-# Custom settings for each luma stage (23 total scenes)
-custom_settings = {
+# Custom settings for each luma stage (23 total scenes) - GAME PROFILE
+game_profile = {
     "VERY_DARK": {"gamma": 5.0, "contrast": 2.7, "brightness": 1.1},
     "DARK": {"gamma": 4.8, "contrast": 2.5, "brightness": 1.08},
     "LOWER_DARK": {"gamma": 4.5, "contrast": 2.3, "brightness": 1.05},
@@ -93,6 +93,35 @@ custom_settings = {
     "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0}
 }
 
+# Movie profile with balanced luminance lift (starts from UPPER_MID, max gamma 5.0)
+movie_profile = {
+    "VERY_DARK": {"gamma": 5.0, "contrast": 2.7, "brightness": 1.4},
+    "DARK": {"gamma": 4.8, "contrast": 2.5, "brightness": 1.35},
+    "LOWER_DARK": {"gamma": 4.5, "contrast": 2.3, "brightness": 1.3},
+    "MID_DARK": {"gamma": 4.2, "contrast": 2.1, "brightness": 1.25},
+    "UPPER_DARK": {"gamma": 3.8, "contrast": 1.9, "brightness": 1.2},
+    "LOWER_MID_DARK": {"gamma": 3.4, "contrast": 1.7, "brightness": 1.15},
+    "MID_MID_DARK": {"gamma": 3.0, "contrast": 1.5, "brightness": 1.1},
+    "UPPER_MID_DARK": {"gamma": 2.6, "contrast": 1.3, "brightness": 1.08},
+    "LOWER_MID": {"gamma": 2.2, "contrast": 1.2, "brightness": 1.05},
+    "MID_LOWER_MID": {"gamma": 1.8, "contrast": 1.1, "brightness": 1.03},
+    "UPPER_LOWER_MID": {"gamma": 1.5, "contrast": 1.08, "brightness": 1.01},
+    "MID": {"gamma": 1.3, "contrast": 1.05, "brightness": 1.0},
+    "LOWER_UPPER_MID": {"gamma": 1.2, "contrast": 1.05, "brightness": 1.0},
+    "MID_UPPER_MID": {"gamma": 1.1, "contrast": 1.2, "brightness": 1.0},
+    "UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+    "LOWER_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+    "MID_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+    "UPPER_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+    "LOWER_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+    "MID_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+    "UPPER_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+    "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0}
+}
+
+# Current active profile (default to game)
+custom_settings = game_profile.copy()
+
 # Current scene type for tracking
 current_scene_type = "MID"
 
@@ -104,6 +133,67 @@ BRIGHTNESS_STEP = 0.05
 # Settings file path
 SETTINGS_FILE = "screenbooster_settings.json"
 CONFIG_FILE = "screenbooster_config.json"
+PROFILES_FILE = "screenbooster_profiles.json"
+
+# Profile management
+current_profile_name = "game"
+
+def switch_profile(profile_name):
+    """Switch between game and movie profiles"""
+    global custom_settings, current_profile_name
+    
+    if profile_name == "game":
+        custom_settings = game_profile.copy()
+        current_profile_name = "game"
+        print(f"🎮 Switched to GAME profile")
+    elif profile_name == "movie":
+        custom_settings = movie_profile.copy()
+        current_profile_name = "movie"
+        print(f"🎬 Switched to MOVIE profile")
+    else:
+        print(f"❌ Unknown profile: {profile_name}")
+        return False
+    
+    save_custom_settings()
+    return True
+
+def save_profiles():
+    """Save all profiles to file"""
+    profiles_data = {
+        "game": game_profile,
+        "movie": movie_profile,
+        "current_profile": current_profile_name
+    }
+    
+    try:
+        with open(PROFILES_FILE, 'w') as f:
+            json.dump(profiles_data, f, indent=2)
+        print(f"Profiles saved to {PROFILES_FILE}")
+    except Exception as e:
+        print(f"Could not save profiles: {e}")
+
+def load_profiles():
+    """Load profiles from file"""
+    global game_profile, movie_profile, current_profile_name, custom_settings
+    
+    try:
+        if os.path.exists(PROFILES_FILE):
+            with open(PROFILES_FILE, 'r') as f:
+                profiles_data = json.load(f)
+                
+                # Load profiles if they exist
+                if "game" in profiles_data:
+                    game_profile.update(profiles_data["game"])
+                if "movie" in profiles_data:
+                    movie_profile.update(profiles_data["movie"])
+                
+                # Set current profile
+                loaded_profile = profiles_data.get("current_profile", "game")
+                switch_profile(loaded_profile)
+                
+                print(f"Profiles loaded from {PROFILES_FILE}")
+    except Exception as e:
+        print(f"Could not load profiles: {e}")
 
 def check_safety_lock():
     """Check if safety lock is disabled (Ctrl+Alt held)"""
@@ -135,17 +225,62 @@ def show_menu():
     print("\n" + "="*60)
     print("           SCREENBOOSTER - MAIN MENU")
     print("="*60)
+    profile_icon = "🎮" if current_profile_name == "game" else "🎬"
+    print(f"\nCurrent Profile: {profile_icon} {current_profile_name.upper()}")
     print("\n1. Start ScreenBooster (with keyboard controls)")
     print("2. Configuration Menu")
     print("3. Scene Settings Menu")
-    print("4. View Current Settings")
-    print("5. Check Screen Luma Only")
-    print("6. Reset All to Defaults")
-    print("7. Exit")
+    print("4. Profile Management")
+    print("5. View Current Settings")
+    print("6. Check Screen Luma Only")
+    print("7. Reset All to Defaults")
+    print("8. Exit")
     print("\n" + "="*60)
 
+def show_profile_menu():
+    """Display profile management menu"""
+    print("\n" + "="*60)
+    print("           PROFILE MANAGEMENT")
+    print("="*60)
+    profile_icon = "🎮" if current_profile_name == "game" else "🎬"
+    print(f"\nCurrent Profile: {profile_icon} {current_profile_name.upper()}")
+    print("\nAvailable Profiles:")
+    print("  🎮 Game - High contrast for gaming with shadow boosting")
+    print("  🎬 Movie - Balanced luminance lift for reduced IPS glow")
+    print("\nOptions:")
+    print("1. Switch to Game Profile")
+    print("2. Switch to Movie Profile")
+    print("3. Save All Profiles")
+    print("4. Load Profiles")
+    print("0. Back to Main Menu")
+    print("="*60)
+
+def profile_menu():
+    """Handle profile management menu"""
+    while True:
+        show_profile_menu()
+        choice = input("\nEnter choice (0-4): ").strip()
+        
+        if choice == "0":
+            break
+        elif choice == "1":
+            switch_profile("game")
+            input("Press Enter to continue...")
+        elif choice == "2":
+            switch_profile("movie")
+            input("Press Enter to continue...")
+        elif choice == "3":
+            save_profiles()
+            input("Press Enter to continue...")
+        elif choice == "4":
+            load_profiles()
+            input("Press Enter to continue...")
+        else:
+            print("Invalid choice")
+    
+    save_profiles()
+
 def show_config_menu():
-    """Display configuration menu"""
     print("\n" + "="*60)
     print("           CONFIGURATION MENU")
     print("="*60)
@@ -738,6 +873,10 @@ def keyboard_listener():
     print("  (Hold Ctrl+Alt +) R (reset ALL scenes to defaults)")
     print("  (Hold Ctrl+Alt +) S (manually save settings)")
     
+    print("\n=== Profile Controls ===")
+    print("  (Hold Ctrl+Alt +) P (switch to Game profile)")
+    print("  (Hold Ctrl+Alt +) Shift+P (switch to Movie profile)")
+    
     print("\n=== Configuration Controls ===")
     print("  (Hold Ctrl+Alt +) 1 (increase) / Shift+1 (decrease)")
     print("  (Hold Ctrl+Alt +) 2 (increase) / Shift+2 (decrease)")
@@ -799,6 +938,14 @@ def keyboard_listener():
                     time.sleep(0.5)
                 elif keyboard.is_pressed('s') and not keyboard.is_pressed('ctrl'):
                     save_custom_settings()
+                    time.sleep(0.5)
+                elif keyboard.is_pressed('p') and not keyboard.is_pressed('shift'):
+                    # Switch to game profile
+                    switch_profile("game")
+                    time.sleep(0.5)
+                elif keyboard.is_pressed('p') and keyboard.is_pressed('shift'):
+                    # Switch to movie profile
+                    switch_profile("movie")
                     time.sleep(0.5)
                 
                 # Configuration controls
@@ -1218,6 +1365,8 @@ def signal_handler(sig, frame):
 def main():
     global current_gamma, current_contrast, current_brightness, running
     
+    # Load profiles at startup
+    load_profiles()
     # Load custom settings at startup
     load_custom_settings()
     # Load configuration at startup
@@ -1225,7 +1374,7 @@ def main():
     
     while True:
         show_menu()
-        choice = input("\nEnter choice (1-7): ").strip()
+        choice = input("\nEnter choice (1-8): ").strip()
         
         if choice == "1":
             # Start ScreenBooster with keyboard controls
@@ -1237,12 +1386,14 @@ def main():
         elif choice == "3":
             scene_menu()
         elif choice == "4":
-            view_current_settings()
+            profile_menu()
         elif choice == "5":
-            check_screen_luma()
+            view_current_settings()
         elif choice == "6":
-            reset_all_defaults()
+            check_screen_luma()
         elif choice == "7":
+            reset_all_defaults()
+        elif choice == "8":
             print("Goodbye!")
             break
         else:
