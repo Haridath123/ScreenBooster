@@ -64,7 +64,7 @@ UPPER_BRIGHT_THRESHOLD = 0.80       # Upper bright
 BRIGHT_THRESHOLD = 0.84            # Above this = bright scene
 
 # Performance optimizations
-SKIP_FRAMES = 2           # Skip every N frames for analysis (0 = no skip)
+SKIP_FRAMES = 0           # Skip every N frames for analysis (0 = no skip)
 REGION_SAMPLE_SIZE = 0.05 # Sample smaller regions (5% of original size)
 
 # Configuration adjustment step sizes
@@ -1414,8 +1414,12 @@ def analyze_screen():
         highlight_ratio = np.sum(luma_array > 0.8) / luma_array.size
         shadow_ratio = np.sum(luma_array < 0.2) / luma_array.size
         
+        print(f"DEBUG: Calculated luma={luma:.3f}")
         return luma, contrast, min_luma, max_luma, highlight_ratio, median_luma, shadow_ratio
-    except:
+    except Exception as e:
+        import traceback
+        print(f"Error in analyze_screen: {e}")
+        traceback.print_exc()
         return 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5
 
 def calculate_targets(luma, contrast, min_luma, max_luma, highlight_ratio, median_luma, shadow_ratio):
@@ -1503,17 +1507,8 @@ def check_screen_luma():
             shadow_luma_mask = luma_array < 0.2
             shadow_ratio = np.sum(shadow_luma_mask) / luma_array.size
             
-            # Debug output every second
-            if frame_count % int(1.0 / REFRESH_RATE) == 0:  # Every 1 second
-                # Quick debug - show raw pixel values when luma is very low
-                raw_mean = np.mean(img_array)
-                raw_max = np.max(img_array)
-                raw_min = np.min(img_array)
-                
-                if luma < 0.1:  # Very low luma - show debug info
-                    print(f"Luma: {luma:.3f} | Raw: {raw_mean:.1f} (min:{raw_min:.1f} max:{raw_max:.1f}) | Shape: {img_array.shape}", flush=True)
-                else:
-                    print(f"Luma: {luma:.3f}", flush=True)  # Normal luma printing
+            # Debug output - print luma every frame
+            print(f"\rLume: {luma:.3f}", end="", flush=True)
             
             # Determine scene type
             if highlight_ratio > 0.8:
@@ -1535,10 +1530,9 @@ def check_screen_luma():
             else:
                 scene_type = "BRIGHT"
             
-            # Status update every second
+            # Status update every frame
             frame_count += 1
-            if frame_count % int(1.0 / REFRESH_RATE) == 0:
-                print(f"Luma Check | {scene_type} | Luma: {luma:.3f} | Min: {min_luma:.3f} | Max: {max_luma:.3f} | Highlights: {highlight_ratio:.2f}", end='\r')
+            print(f"Luma Check | {scene_type} | Lume: {luma:.3f} | Min: {min_luma:.3f} | Max: {max_luma:.3f} | Highlights: {highlight_ratio:.2f}", end='\r')
             
             time.sleep(REFRESH_RATE)
             
@@ -1653,14 +1647,13 @@ def run_screenbooster():
             if apply_settings(current_gamma, current_contrast, current_brightness):
                 frame_count += 1
                 
-                # Status update every second
-                if frame_count % int(1.0 / REFRESH_RATE) == 0:
-                    scene_type = current_scene_type
-                    custom_vals = custom_settings[scene_type]
-                    gamma_change = target_gamma - current_gamma
-                    contrast_change = target_contrast - current_contrast
-                    brightness_change = target_brightness - current_brightness
-                    print(f"{scene_type} | γ{current_gamma:.2f} C{current_contrast:.2f} B{current_brightness:.2f} | Custom: γ{custom_vals['gamma']:.2f} C{custom_vals['contrast']:.2f} B{custom_vals['brightness']:.2f} | Δγ{gamma_change:+.2f} ΔC{contrast_change:+.2f} ΔB{brightness_change:+.2f} | Luma: {luma:.3f}", end='\r')
+                # Status update every frame
+                scene_type = current_scene_type
+                custom_vals = custom_settings[scene_type]
+                gamma_change = target_gamma - current_gamma
+                contrast_change = target_contrast - current_contrast
+                brightness_change = target_brightness - current_brightness
+                print(f"{scene_type} | γ{current_gamma:.2f} C{current_contrast:.2f} B{current_brightness:.2f} | Custom: γ{custom_vals['gamma']:.2f} C{custom_vals['contrast']:.2f} B{custom_vals['brightness']:.2f} | Δγ{gamma_change:+.2f} ΔC{contrast_change:+.2f} ΔB{brightness_change:+.2f} | Lume: {luma:.3f}", end='\r')
             
             time.sleep(REFRESH_RATE)
             
