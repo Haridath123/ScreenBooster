@@ -49,7 +49,7 @@ $releaseQuickStart = @"
 - BUILD_GUIDE.md - Build instructions
 
 Built: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
-Version: 2.3.0
+Version: 2.3.1
 "@
 Set-Content -Path "release\QUICK_START.md" -Value $releaseQuickStart
 
@@ -86,7 +86,7 @@ $debugQuickStart = @"
 - All print statements visible in console
 
 Built: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
-Version: 2.3.0 Debug
+Version: 2.3.1 Debug
 Mode: Console enabled
 "@
 Set-Content -Path "debug_release\QUICK_START_DEBUG.md" -Value $debugQuickStart

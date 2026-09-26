@@ -41,7 +41,7 @@ echo 2. Run ScreenBooster.exe >> "release\QUICK_START.md"
 echo 3. No installation required! >> "release\QUICK_START.md"
 echo. >> "release\QUICK_START.md"
 echo Built: %date% %time% >> "release\QUICK_START.md"
-echo Version: 2.3.0 >> "release\QUICK_START.md"
+echo Version: 2.3.1 >> "release\QUICK_START.md"
 
 echo.
 echo Building DEBUG version...
@@ -70,7 +70,7 @@ echo 2. Run ScreenBooster.exe >> "debug_release\QUICK_START_DEBUG.md"
 echo 3. Debug console window will be visible >> "debug_release\QUICK_START_DEBUG.md"
 echo. >> "debug_release\QUICK_START_DEBUG.md"
 echo Built: %date% %time% >> "debug_release\QUICK_START_DEBUG.md"
-echo Version: 2.3.0 Debug >> "debug_release\QUICK_START_DEBUG.md"
+echo Version: 2.3.1 Debug >> "debug_release\QUICK_START_DEBUG.md"
 
 echo.
 echo ========================================

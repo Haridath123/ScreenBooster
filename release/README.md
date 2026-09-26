@@ -1,4 +1,4 @@
-# ScreenBooster v2.3.0 - The Complete Auto-Exposure Journey
+# ScreenBooster v2.3.1 - The Complete Auto-Exposure Journey
 
 ## 🎯 The Origin Story - Why This Exists
 

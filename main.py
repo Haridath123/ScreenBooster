@@ -151,7 +151,6 @@ CONTRAST_STEP = 0.05
 BRIGHTNESS_STEP = 0.05
 
 # Settings file path - use the directory where the EXE is located
-import sys
 if getattr(sys, 'frozen', False):
     # Running as compiled EXE
     EXE_DIR = os.path.dirname(sys.executable)
@@ -322,29 +321,58 @@ def show_config_menu():
     print(f"  Refresh Rate: {REFRESH_RATE:.3f}s ({1000/REFRESH_RATE:.0f}Hz)")
     print(f"  Skip Frames: {SKIP_FRAMES} (0 = no skip)")
     print(f"\nScene Thresholds:")
-    print(f"  Very Dark: < {DARK_THRESHOLD:.2f}")
+    print(f"  Very Dark: < {VERY_DARK_THRESHOLD:.2f}")
+    print(f"  Dark: {VERY_DARK_THRESHOLD:.2f} - {DARK_THRESHOLD:.2f}")
     print(f"  Lower Dark: {DARK_THRESHOLD:.2f} - {LOWER_DARK_THRESHOLD:.2f}")
     print(f"  Mid Dark: {LOWER_DARK_THRESHOLD:.2f} - {MID_DARK_THRESHOLD:.2f}")
     print(f"  Upper Dark: {MID_DARK_THRESHOLD:.2f} - {UPPER_DARK_THRESHOLD:.2f}")
-    print(f"  Lower Mid: {UPPER_DARK_THRESHOLD:.2f} - {LOWER_MID_THRESHOLD:.2f}")
-    print(f"  Mid: {LOWER_MID_THRESHOLD:.2f} - {MID_THRESHOLD:.2f}")
-    print(f"  Upper Mid: {MID_THRESHOLD:.2f} - {UPPER_MID_THRESHOLD:.2f}")
-    print(f"  Bright: > {BRIGHT_THRESHOLD:.2f}")
+    print(f"  Lower Mid Dark: {UPPER_DARK_THRESHOLD:.2f} - {LOWER_MID_DARK_THRESHOLD:.2f}")
+    print(f"  Mid Mid Dark: {LOWER_MID_DARK_THRESHOLD:.2f} - {MID_MID_DARK_THRESHOLD:.2f}")
+    print(f"  Upper Mid Dark: {MID_MID_DARK_THRESHOLD:.2f} - {UPPER_MID_DARK_THRESHOLD:.2f}")
+    print(f"  Lower Mid: {UPPER_MID_DARK_THRESHOLD:.2f} - {LOWER_MID_THRESHOLD:.2f}")
+    print(f"  Mid Lower Mid: {LOWER_MID_THRESHOLD:.2f} - {MID_LOWER_MID_THRESHOLD:.2f}")
+    print(f"  Upper Lower Mid: {MID_LOWER_MID_THRESHOLD:.2f} - {UPPER_LOWER_MID_THRESHOLD:.2f}")
+    print(f"  Mid: {UPPER_LOWER_MID_THRESHOLD:.2f} - {MID_THRESHOLD:.2f}")
+    print(f"  Lower Upper Mid: {MID_THRESHOLD:.2f} - {LOWER_UPPER_MID_THRESHOLD:.2f}")
+    print(f"  Mid Upper Mid: {LOWER_UPPER_MID_THRESHOLD:.2f} - {MID_UPPER_MID_THRESHOLD:.2f}")
+    print(f"  Upper Mid: {MID_UPPER_MID_THRESHOLD:.2f} - {UPPER_MID_THRESHOLD:.2f}")
+    print(f"  Lower Bright Mid: {UPPER_MID_THRESHOLD:.2f} - {LOWER_BRIGHT_MID_THRESHOLD:.2f}")
+    print(f"  Mid Bright Mid: {LOWER_BRIGHT_MID_THRESHOLD:.2f} - {MID_BRIGHT_MID_THRESHOLD:.2f}")
+    print(f"  Upper Bright Mid: {MID_BRIGHT_MID_THRESHOLD:.2f} - {UPPER_BRIGHT_MID_THRESHOLD:.2f}")
+    print(f"  Lower Bright: {UPPER_BRIGHT_MID_THRESHOLD:.2f} - {LOWER_BRIGHT_THRESHOLD:.2f}")
+    print(f"  Mid Bright: {LOWER_BRIGHT_THRESHOLD:.2f} - {MID_BRIGHT_THRESHOLD:.2f}")
+    print(f"  Upper Bright: {MID_BRIGHT_THRESHOLD:.2f} - {UPPER_BRIGHT_THRESHOLD:.2f}")
+    print(f"  Bright: {UPPER_BRIGHT_THRESHOLD:.2f} - {BRIGHT_THRESHOLD:.2f}")
+    print(f"  Very Bright: > {BRIGHT_THRESHOLD:.2f}")
     
     print("\n" + "="*60)
     print("Options:")
     print("1. Adjust Smoothing")
     print("2. Adjust Refresh Rate")
     print("3. Adjust Skip Frames")
-    print("4. Adjust Dark Threshold")
-    print("5. Adjust Lower Dark Threshold")
-    print("6. Adjust Mid Dark Threshold")
-    print("7. Adjust Upper Dark Threshold")
-    print("8. Adjust Lower Mid Threshold")
-    print("9. Adjust Mid Threshold")
-    print("10. Adjust Upper Mid Threshold")
-    print("11. Adjust Bright Threshold")
-    print("12. Reset Configuration to Defaults")
+    print("4. Adjust Very Dark Threshold")
+    print("5. Adjust Dark Threshold")
+    print("6. Adjust Lower Dark Threshold")
+    print("7. Adjust Mid Dark Threshold")
+    print("8. Adjust Upper Dark Threshold")
+    print("9. Adjust Lower Mid Dark Threshold")
+    print("10. Adjust Mid Mid Dark Threshold")
+    print("11. Adjust Upper Mid Dark Threshold")
+    print("12. Adjust Lower Mid Threshold")
+    print("13. Adjust Mid Lower Mid Threshold")
+    print("14. Adjust Upper Lower Mid Threshold")
+    print("15. Adjust Mid Threshold")
+    print("16. Adjust Lower Upper Mid Threshold")
+    print("17. Adjust Mid Upper Mid Threshold")
+    print("18. Adjust Upper Mid Threshold")
+    print("19. Adjust Lower Bright Mid Threshold")
+    print("20. Adjust Mid Bright Mid Threshold")
+    print("21. Adjust Upper Bright Mid Threshold")
+    print("22. Adjust Lower Bright Threshold")
+    print("23. Adjust Mid Bright Threshold")
+    print("24. Adjust Upper Bright Threshold")
+    print("25. Adjust Bright Threshold")
+    print("26. Reset Configuration to Defaults")
     print("0. Back to Main Menu")
     print("="*60)
 
@@ -354,15 +382,29 @@ def show_scene_menu():
     print("           SCENE SETTINGS MENU")
     print("="*60)
     print("\nSelect Scene Type:")
-    print("1. Very Bright")
-    print("2. Very Dark")
+    print("1. Very Dark")
+    print("2. Dark")
     print("3. Lower Dark")
     print("4. Mid Dark")
     print("5. Upper Dark")
-    print("6. Lower Mid")
-    print("7. Mid")
-    print("8. Upper Mid")
-    print("9. Bright")
+    print("6. Lower Mid Dark")
+    print("7. Mid Mid Dark")
+    print("8. Upper Mid Dark")
+    print("9. Lower Mid")
+    print("10. Mid Lower Mid")
+    print("11. Upper Lower Mid")
+    print("12. Mid")
+    print("13. Lower Upper Mid")
+    print("14. Mid Upper Mid")
+    print("15. Upper Mid")
+    print("16. Lower Bright Mid")
+    print("17. Mid Bright Mid")
+    print("18. Upper Bright Mid")
+    print("19. Lower Bright")
+    print("20. Mid Bright")
+    print("21. Upper Bright")
+    print("22. Bright")
+    print("23. Very Bright")
     print("0. Back to Main Menu")
     print("="*60)
 
@@ -426,12 +468,15 @@ def adjust_value_menu(current_value, min_val, max_val, step, name):
 def config_menu():
     """Handle configuration menu"""
     global SMOOTHING, REFRESH_RATE, SKIP_FRAMES
-    global DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
-    global LOWER_MID_THRESHOLD, MID_THRESHOLD, UPPER_MID_THRESHOLD, BRIGHT_THRESHOLD
+    global VERY_DARK_THRESHOLD, DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
+    global LOWER_MID_DARK_THRESHOLD, MID_MID_DARK_THRESHOLD, UPPER_MID_DARK_THRESHOLD, LOWER_MID_THRESHOLD
+    global MID_LOWER_MID_THRESHOLD, UPPER_LOWER_MID_THRESHOLD, MID_THRESHOLD, LOWER_UPPER_MID_THRESHOLD
+    global MID_UPPER_MID_THRESHOLD, UPPER_MID_THRESHOLD, LOWER_BRIGHT_MID_THRESHOLD, MID_BRIGHT_MID_THRESHOLD
+    global UPPER_BRIGHT_MID_THRESHOLD, LOWER_BRIGHT_THRESHOLD, MID_BRIGHT_THRESHOLD, UPPER_BRIGHT_THRESHOLD, BRIGHT_THRESHOLD
     
     while True:
         show_config_menu()
-        choice = safe_input("\nEnter choice (0-12): ").strip()
+        choice = safe_input("\nEnter choice (0-26): ").strip()
         
         if choice == "0":
             break
@@ -442,22 +487,50 @@ def config_menu():
         elif choice == "3":
             SKIP_FRAMES = int(adjust_value_menu(SKIP_FRAMES, 0, 10, 1, "Skip Frames"))
         elif choice == "4":
-            DARK_THRESHOLD = adjust_value_menu(DARK_THRESHOLD, 0.01, LOWER_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Dark Threshold")
+            VERY_DARK_THRESHOLD = adjust_value_menu(VERY_DARK_THRESHOLD, 0.0, DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Very Dark Threshold")
         elif choice == "5":
-            LOWER_DARK_THRESHOLD = adjust_value_menu(LOWER_DARK_THRESHOLD, DARK_THRESHOLD + 0.01, MID_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Dark Threshold")
+            DARK_THRESHOLD = adjust_value_menu(DARK_THRESHOLD, VERY_DARK_THRESHOLD + 0.01, LOWER_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Dark Threshold")
         elif choice == "6":
-            MID_DARK_THRESHOLD = adjust_value_menu(MID_DARK_THRESHOLD, LOWER_DARK_THRESHOLD + 0.01, UPPER_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Dark Threshold")
+            LOWER_DARK_THRESHOLD = adjust_value_menu(LOWER_DARK_THRESHOLD, DARK_THRESHOLD + 0.01, MID_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Dark Threshold")
         elif choice == "7":
-            UPPER_DARK_THRESHOLD = adjust_value_menu(UPPER_DARK_THRESHOLD, MID_DARK_THRESHOLD + 0.01, LOWER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Dark Threshold")
+            MID_DARK_THRESHOLD = adjust_value_menu(MID_DARK_THRESHOLD, LOWER_DARK_THRESHOLD + 0.01, UPPER_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Dark Threshold")
         elif choice == "8":
-            LOWER_MID_THRESHOLD = adjust_value_menu(LOWER_MID_THRESHOLD, UPPER_DARK_THRESHOLD + 0.01, MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Mid Threshold")
+            UPPER_DARK_THRESHOLD = adjust_value_menu(UPPER_DARK_THRESHOLD, MID_DARK_THRESHOLD + 0.01, LOWER_MID_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Dark Threshold")
         elif choice == "9":
-            MID_THRESHOLD = adjust_value_menu(MID_THRESHOLD, LOWER_MID_THRESHOLD + 0.01, UPPER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Threshold")
+            LOWER_MID_DARK_THRESHOLD = adjust_value_menu(LOWER_MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD + 0.01, MID_MID_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Mid Dark Threshold")
         elif choice == "10":
-            UPPER_MID_THRESHOLD = adjust_value_menu(UPPER_MID_THRESHOLD, MID_THRESHOLD + 0.01, BRIGHT_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Mid Threshold")
+            MID_MID_DARK_THRESHOLD = adjust_value_menu(MID_MID_DARK_THRESHOLD, LOWER_MID_DARK_THRESHOLD + 0.01, UPPER_MID_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Mid Dark Threshold")
         elif choice == "11":
-            BRIGHT_THRESHOLD = adjust_value_menu(BRIGHT_THRESHOLD, UPPER_MID_THRESHOLD + 0.01, 0.99, THRESHOLD_STEP, "Bright Threshold")
+            UPPER_MID_DARK_THRESHOLD = adjust_value_menu(UPPER_MID_DARK_THRESHOLD, MID_MID_DARK_THRESHOLD + 0.01, LOWER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Mid Dark Threshold")
         elif choice == "12":
+            LOWER_MID_THRESHOLD = adjust_value_menu(LOWER_MID_THRESHOLD, UPPER_MID_DARK_THRESHOLD + 0.01, MID_LOWER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Mid Threshold")
+        elif choice == "13":
+            MID_LOWER_MID_THRESHOLD = adjust_value_menu(MID_LOWER_MID_THRESHOLD, LOWER_MID_THRESHOLD + 0.01, UPPER_LOWER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Lower Mid Threshold")
+        elif choice == "14":
+            UPPER_LOWER_MID_THRESHOLD = adjust_value_menu(UPPER_LOWER_MID_THRESHOLD, MID_LOWER_MID_THRESHOLD + 0.01, MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Lower Mid Threshold")
+        elif choice == "15":
+            MID_THRESHOLD = adjust_value_menu(MID_THRESHOLD, UPPER_LOWER_MID_THRESHOLD + 0.01, LOWER_UPPER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Threshold")
+        elif choice == "16":
+            LOWER_UPPER_MID_THRESHOLD = adjust_value_menu(LOWER_UPPER_MID_THRESHOLD, MID_THRESHOLD + 0.01, MID_UPPER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Upper Mid Threshold")
+        elif choice == "17":
+            MID_UPPER_MID_THRESHOLD = adjust_value_menu(MID_UPPER_MID_THRESHOLD, LOWER_UPPER_MID_THRESHOLD + 0.01, UPPER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Upper Mid Threshold")
+        elif choice == "18":
+            UPPER_MID_THRESHOLD = adjust_value_menu(UPPER_MID_THRESHOLD, MID_UPPER_MID_THRESHOLD + 0.01, LOWER_BRIGHT_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Mid Threshold")
+        elif choice == "19":
+            LOWER_BRIGHT_MID_THRESHOLD = adjust_value_menu(LOWER_BRIGHT_MID_THRESHOLD, UPPER_MID_THRESHOLD + 0.01, MID_BRIGHT_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Bright Mid Threshold")
+        elif choice == "20":
+            MID_BRIGHT_MID_THRESHOLD = adjust_value_menu(MID_BRIGHT_MID_THRESHOLD, LOWER_BRIGHT_MID_THRESHOLD + 0.01, UPPER_BRIGHT_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Bright Mid Threshold")
+        elif choice == "21":
+            UPPER_BRIGHT_MID_THRESHOLD = adjust_value_menu(UPPER_BRIGHT_MID_THRESHOLD, MID_BRIGHT_MID_THRESHOLD + 0.01, LOWER_BRIGHT_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Bright Mid Threshold")
+        elif choice == "22":
+            LOWER_BRIGHT_THRESHOLD = adjust_value_menu(LOWER_BRIGHT_THRESHOLD, UPPER_BRIGHT_MID_THRESHOLD + 0.01, MID_BRIGHT_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Bright Threshold")
+        elif choice == "23":
+            MID_BRIGHT_THRESHOLD = adjust_value_menu(MID_BRIGHT_THRESHOLD, LOWER_BRIGHT_THRESHOLD + 0.01, UPPER_BRIGHT_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Bright Threshold")
+        elif choice == "24":
+            UPPER_BRIGHT_THRESHOLD = adjust_value_menu(UPPER_BRIGHT_THRESHOLD, MID_BRIGHT_THRESHOLD + 0.01, BRIGHT_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Bright Threshold")
+        elif choice == "25":
+            BRIGHT_THRESHOLD = adjust_value_menu(BRIGHT_THRESHOLD, UPPER_BRIGHT_THRESHOLD + 0.01, 0.99, THRESHOLD_STEP, "Bright Threshold")
+        elif choice == "26":
             if safe_input("Reset all configuration to defaults? (y/n): ").lower() == 'y':
                 reset_config()
         else:
@@ -468,17 +541,21 @@ def config_menu():
 def scene_menu():
     """Handle scene settings menu"""
     scene_types = [
-        "VERY_BRIGHT", "VERY_DARK", "LOWER_DARK", "MID_DARK", 
-        "UPPER_DARK", "LOWER_MID", "MID", "UPPER_MID", "BRIGHT"
+        "VERY_DARK", "DARK", "LOWER_DARK", "MID_DARK", "UPPER_DARK",
+        "LOWER_MID_DARK", "MID_MID_DARK", "UPPER_MID_DARK", "LOWER_MID",
+        "MID_LOWER_MID", "UPPER_LOWER_MID", "MID", "LOWER_UPPER_MID",
+        "MID_UPPER_MID", "UPPER_MID", "LOWER_BRIGHT_MID", "MID_BRIGHT_MID",
+        "UPPER_BRIGHT_MID", "LOWER_BRIGHT", "MID_BRIGHT", "UPPER_BRIGHT",
+        "BRIGHT", "VERY_BRIGHT"
     ]
     
     while True:
         show_scene_menu()
-        choice = safe_input("\nEnter choice (0-9): ").strip()
+        choice = safe_input("\nEnter choice (0-23): ").strip()
         
         if choice == "0":
             break
-        elif choice in [str(i) for i in range(1, 10)]:
+        elif choice in [str(i) for i in range(1, 24)]:
             scene_type = scene_types[int(choice) - 1]
             scene_settings_menu(scene_type)
         else:
@@ -507,15 +584,29 @@ def scene_settings_menu(scene_type):
         elif choice == "4":
             if safe_input(f"Reset {scene_type} to defaults? (y/n): ").lower() == 'y':
                 defaults = {
-                    "VERY_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 0.96},
-                    "VERY_DARK": {"gamma": 3.1, "contrast": 1.6, "brightness": 1.0},
-                    "LOWER_DARK": {"gamma": 2.9, "contrast": 1.9, "brightness": 0.9},
-                    "MID_DARK": {"gamma": 2.6, "contrast": 1.8, "brightness": 0.8},
-                    "UPPER_DARK": {"gamma": 2.0, "contrast": 1.5, "brightness": 0.7},
-                    "LOWER_MID": {"gamma": 1.6, "contrast": 1.3, "brightness": 0.9},
-                    "MID": {"gamma": 1.1, "contrast": 1.1, "brightness": 1.0},
-                    "UPPER_MID": {"gamma": 1.1, "contrast": 1.0, "brightness": 1.0},
-                    "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0}
+                    "VERY_DARK": {"gamma": 5.0, "contrast": 2.7, "brightness": 1.1},
+                    "DARK": {"gamma": 4.8, "contrast": 2.5, "brightness": 1.08},
+                    "LOWER_DARK": {"gamma": 4.5, "contrast": 2.3, "brightness": 1.05},
+                    "MID_DARK": {"gamma": 4.2, "contrast": 2.1, "brightness": 1.02},
+                    "UPPER_DARK": {"gamma": 3.8, "contrast": 1.9, "brightness": 1.0},
+                    "LOWER_MID_DARK": {"gamma": 3.2, "contrast": 1.6, "brightness": 1.0},
+                    "MID_MID_DARK": {"gamma": 2.6, "contrast": 1.3, "brightness": 1.0},
+                    "UPPER_MID_DARK": {"gamma": 2.0, "contrast": 1.1, "brightness": 1.0},
+                    "LOWER_MID": {"gamma": 1.6, "contrast": 1.05, "brightness": 1.0},
+                    "MID_LOWER_MID": {"gamma": 1.3, "contrast": 1.02, "brightness": 1.0},
+                    "UPPER_LOWER_MID": {"gamma": 1.1, "contrast": 1.01, "brightness": 1.0},
+                    "MID": {"gamma": 1.1, "contrast": 1.0, "brightness": 1.0},
+                    "LOWER_UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "MID_UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "LOWER_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "MID_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "UPPER_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "LOWER_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "MID_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "UPPER_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                    "VERY_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 0.96}
                 }
                 custom_settings[scene_type] = defaults[scene_type].copy()
                 print(f"Reset {scene_type} to defaults")
@@ -557,15 +648,29 @@ def reset_all_defaults():
         reset_config()
         # Reset scene settings
         defaults = {
-            "VERY_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 0.96},
-            "VERY_DARK": {"gamma": 3.1, "contrast": 1.6, "brightness": 1.0},
-            "LOWER_DARK": {"gamma": 2.9, "contrast": 1.9, "brightness": 0.9},
-            "MID_DARK": {"gamma": 2.6, "contrast": 1.8, "brightness": 0.8},
-            "UPPER_DARK": {"gamma": 2.0, "contrast": 1.5, "brightness": 0.7},
-            "LOWER_MID": {"gamma": 1.6, "contrast": 1.3, "brightness": 0.9},
-            "MID": {"gamma": 1.1, "contrast": 1.1, "brightness": 1.0},
-            "UPPER_MID": {"gamma": 1.1, "contrast": 1.0, "brightness": 1.0},
-            "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0}
+            "VERY_DARK": {"gamma": 5.0, "contrast": 2.7, "brightness": 1.1},
+            "DARK": {"gamma": 4.8, "contrast": 2.5, "brightness": 1.08},
+            "LOWER_DARK": {"gamma": 4.5, "contrast": 2.3, "brightness": 1.05},
+            "MID_DARK": {"gamma": 4.2, "contrast": 2.1, "brightness": 1.02},
+            "UPPER_DARK": {"gamma": 3.8, "contrast": 1.9, "brightness": 1.0},
+            "LOWER_MID_DARK": {"gamma": 3.2, "contrast": 1.6, "brightness": 1.0},
+            "MID_MID_DARK": {"gamma": 2.6, "contrast": 1.3, "brightness": 1.0},
+            "UPPER_MID_DARK": {"gamma": 2.0, "contrast": 1.1, "brightness": 1.0},
+            "LOWER_MID": {"gamma": 1.6, "contrast": 1.05, "brightness": 1.0},
+            "MID_LOWER_MID": {"gamma": 1.3, "contrast": 1.02, "brightness": 1.0},
+            "UPPER_LOWER_MID": {"gamma": 1.1, "contrast": 1.01, "brightness": 1.0},
+            "MID": {"gamma": 1.1, "contrast": 1.0, "brightness": 1.0},
+            "LOWER_UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "MID_UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "LOWER_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "MID_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "UPPER_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "LOWER_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "MID_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "UPPER_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+            "VERY_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 0.96}
         }
         global custom_settings
         custom_settings = defaults.copy()
@@ -576,8 +681,11 @@ def reset_all_defaults():
 def load_config():
     """Load configuration from file"""
     global SMOOTHING, REFRESH_RATE, CONTENT_HISTORY_SIZE, SKIP_FRAMES
-    global DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
-    global LOWER_MID_THRESHOLD, MID_THRESHOLD, UPPER_MID_THRESHOLD, BRIGHT_THRESHOLD
+    global VERY_DARK_THRESHOLD, DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
+    global LOWER_MID_DARK_THRESHOLD, MID_MID_DARK_THRESHOLD, UPPER_MID_DARK_THRESHOLD, LOWER_MID_THRESHOLD
+    global MID_LOWER_MID_THRESHOLD, UPPER_LOWER_MID_THRESHOLD, MID_THRESHOLD, LOWER_UPPER_MID_THRESHOLD
+    global MID_UPPER_MID_THRESHOLD, UPPER_MID_THRESHOLD, LOWER_BRIGHT_MID_THRESHOLD, MID_BRIGHT_MID_THRESHOLD
+    global UPPER_BRIGHT_MID_THRESHOLD, LOWER_BRIGHT_THRESHOLD, MID_BRIGHT_THRESHOLD, UPPER_BRIGHT_THRESHOLD, BRIGHT_THRESHOLD
     
     try:
         if os.path.exists(CONFIG_FILE):
@@ -588,13 +696,27 @@ def load_config():
                 REFRESH_RATE = config.get('REFRESH_RATE', REFRESH_RATE)
                 CONTENT_HISTORY_SIZE = config.get('CONTENT_HISTORY_SIZE', CONTENT_HISTORY_SIZE)
                 SKIP_FRAMES = config.get('SKIP_FRAMES', SKIP_FRAMES)
+                VERY_DARK_THRESHOLD = config.get('VERY_DARK_THRESHOLD', VERY_DARK_THRESHOLD)
                 DARK_THRESHOLD = config.get('DARK_THRESHOLD', DARK_THRESHOLD)
                 LOWER_DARK_THRESHOLD = config.get('LOWER_DARK_THRESHOLD', LOWER_DARK_THRESHOLD)
                 MID_DARK_THRESHOLD = config.get('MID_DARK_THRESHOLD', MID_DARK_THRESHOLD)
                 UPPER_DARK_THRESHOLD = config.get('UPPER_DARK_THRESHOLD', UPPER_DARK_THRESHOLD)
+                LOWER_MID_DARK_THRESHOLD = config.get('LOWER_MID_DARK_THRESHOLD', LOWER_MID_DARK_THRESHOLD)
+                MID_MID_DARK_THRESHOLD = config.get('MID_MID_DARK_THRESHOLD', MID_MID_DARK_THRESHOLD)
+                UPPER_MID_DARK_THRESHOLD = config.get('UPPER_MID_DARK_THRESHOLD', UPPER_MID_DARK_THRESHOLD)
                 LOWER_MID_THRESHOLD = config.get('LOWER_MID_THRESHOLD', LOWER_MID_THRESHOLD)
+                MID_LOWER_MID_THRESHOLD = config.get('MID_LOWER_MID_THRESHOLD', MID_LOWER_MID_THRESHOLD)
+                UPPER_LOWER_MID_THRESHOLD = config.get('UPPER_LOWER_MID_THRESHOLD', UPPER_LOWER_MID_THRESHOLD)
                 MID_THRESHOLD = config.get('MID_THRESHOLD', MID_THRESHOLD)
+                LOWER_UPPER_MID_THRESHOLD = config.get('LOWER_UPPER_MID_THRESHOLD', LOWER_UPPER_MID_THRESHOLD)
+                MID_UPPER_MID_THRESHOLD = config.get('MID_UPPER_MID_THRESHOLD', MID_UPPER_MID_THRESHOLD)
                 UPPER_MID_THRESHOLD = config.get('UPPER_MID_THRESHOLD', UPPER_MID_THRESHOLD)
+                LOWER_BRIGHT_MID_THRESHOLD = config.get('LOWER_BRIGHT_MID_THRESHOLD', LOWER_BRIGHT_MID_THRESHOLD)
+                MID_BRIGHT_MID_THRESHOLD = config.get('MID_BRIGHT_MID_THRESHOLD', MID_BRIGHT_MID_THRESHOLD)
+                UPPER_BRIGHT_MID_THRESHOLD = config.get('UPPER_BRIGHT_MID_THRESHOLD', UPPER_BRIGHT_MID_THRESHOLD)
+                LOWER_BRIGHT_THRESHOLD = config.get('LOWER_BRIGHT_THRESHOLD', LOWER_BRIGHT_THRESHOLD)
+                MID_BRIGHT_THRESHOLD = config.get('MID_BRIGHT_THRESHOLD', MID_BRIGHT_THRESHOLD)
+                UPPER_BRIGHT_THRESHOLD = config.get('UPPER_BRIGHT_THRESHOLD', UPPER_BRIGHT_THRESHOLD)
                 BRIGHT_THRESHOLD = config.get('BRIGHT_THRESHOLD', BRIGHT_THRESHOLD)
                 print(f"Configuration loaded from {CONFIG_FILE}")
     except Exception as e:
@@ -607,13 +729,27 @@ def save_config():
         'REFRESH_RATE': REFRESH_RATE,
         'CONTENT_HISTORY_SIZE': CONTENT_HISTORY_SIZE,
         'SKIP_FRAMES': SKIP_FRAMES,
+        'VERY_DARK_THRESHOLD': VERY_DARK_THRESHOLD,
         'DARK_THRESHOLD': DARK_THRESHOLD,
         'LOWER_DARK_THRESHOLD': LOWER_DARK_THRESHOLD,
         'MID_DARK_THRESHOLD': MID_DARK_THRESHOLD,
         'UPPER_DARK_THRESHOLD': UPPER_DARK_THRESHOLD,
+        'LOWER_MID_DARK_THRESHOLD': LOWER_MID_DARK_THRESHOLD,
+        'MID_MID_DARK_THRESHOLD': MID_MID_DARK_THRESHOLD,
+        'UPPER_MID_DARK_THRESHOLD': UPPER_MID_DARK_THRESHOLD,
         'LOWER_MID_THRESHOLD': LOWER_MID_THRESHOLD,
+        'MID_LOWER_MID_THRESHOLD': MID_LOWER_MID_THRESHOLD,
+        'UPPER_LOWER_MID_THRESHOLD': UPPER_LOWER_MID_THRESHOLD,
         'MID_THRESHOLD': MID_THRESHOLD,
+        'LOWER_UPPER_MID_THRESHOLD': LOWER_UPPER_MID_THRESHOLD,
+        'MID_UPPER_MID_THRESHOLD': MID_UPPER_MID_THRESHOLD,
         'UPPER_MID_THRESHOLD': UPPER_MID_THRESHOLD,
+        'LOWER_BRIGHT_MID_THRESHOLD': LOWER_BRIGHT_MID_THRESHOLD,
+        'MID_BRIGHT_MID_THRESHOLD': MID_BRIGHT_MID_THRESHOLD,
+        'UPPER_BRIGHT_MID_THRESHOLD': UPPER_BRIGHT_MID_THRESHOLD,
+        'LOWER_BRIGHT_THRESHOLD': LOWER_BRIGHT_THRESHOLD,
+        'MID_BRIGHT_THRESHOLD': MID_BRIGHT_THRESHOLD,
+        'UPPER_BRIGHT_THRESHOLD': UPPER_BRIGHT_THRESHOLD,
         'BRIGHT_THRESHOLD': BRIGHT_THRESHOLD
     }
     
@@ -632,8 +768,11 @@ def save_config():
 def adjust_config_setting(setting_type, increase=True):
     """Adjust configuration settings"""
     global SMOOTHING, REFRESH_RATE, CONTENT_HISTORY_SIZE
-    global DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
-    global LOWER_MID_THRESHOLD, MID_THRESHOLD, UPPER_MID_THRESHOLD, BRIGHT_THRESHOLD
+    global VERY_DARK_THRESHOLD, DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
+    global LOWER_MID_DARK_THRESHOLD, MID_MID_DARK_THRESHOLD, UPPER_MID_DARK_THRESHOLD, LOWER_MID_THRESHOLD
+    global MID_LOWER_MID_THRESHOLD, UPPER_LOWER_MID_THRESHOLD, MID_THRESHOLD, LOWER_UPPER_MID_THRESHOLD
+    global MID_UPPER_MID_THRESHOLD, UPPER_MID_THRESHOLD, LOWER_BRIGHT_MID_THRESHOLD, MID_BRIGHT_MID_THRESHOLD
+    global UPPER_BRIGHT_MID_THRESHOLD, LOWER_BRIGHT_THRESHOLD, MID_BRIGHT_THRESHOLD, UPPER_BRIGHT_THRESHOLD, BRIGHT_THRESHOLD
     
     step = 0
     if setting_type == 'smoothing':
@@ -654,12 +793,21 @@ def adjust_config_setting(setting_type, increase=True):
         REFRESH_RATE = new_value
         print(f"Refresh Rate: {REFRESH_RATE:.3f}s ({1000/REFRESH_RATE:.0f}Hz)")
         
+    elif setting_type == 'very_dark_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(DARK_THRESHOLD - 0.01, VERY_DARK_THRESHOLD + step)
+        else:
+            new_value = max(0.0, VERY_DARK_THRESHOLD - step)
+        VERY_DARK_THRESHOLD = new_value
+        print(f"Very Dark Threshold: {VERY_DARK_THRESHOLD:.2f}")
+        
     elif setting_type == 'dark_threshold':
         step = THRESHOLD_STEP
         if increase:
             new_value = min(LOWER_DARK_THRESHOLD - 0.01, DARK_THRESHOLD + step)
         else:
-            new_value = max(0.01, DARK_THRESHOLD - step)
+            new_value = max(VERY_DARK_THRESHOLD + 0.01, DARK_THRESHOLD - step)
         DARK_THRESHOLD = new_value
         print(f"Dark Threshold: {DARK_THRESHOLD:.2f}")
         
@@ -684,47 +832,164 @@ def adjust_config_setting(setting_type, increase=True):
     elif setting_type == 'upper_dark_threshold':
         step = THRESHOLD_STEP
         if increase:
-            new_value = min(LOWER_MID_THRESHOLD - 0.01, UPPER_DARK_THRESHOLD + step)
+            new_value = min(LOWER_MID_DARK_THRESHOLD - 0.01, UPPER_DARK_THRESHOLD + step)
         else:
             new_value = max(MID_DARK_THRESHOLD + 0.01, UPPER_DARK_THRESHOLD - step)
         UPPER_DARK_THRESHOLD = new_value
         print(f"Upper Dark Threshold: {UPPER_DARK_THRESHOLD:.2f}")
         
+    elif setting_type == 'lower_mid_dark_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(MID_MID_DARK_THRESHOLD - 0.01, LOWER_MID_DARK_THRESHOLD + step)
+        else:
+            new_value = max(UPPER_DARK_THRESHOLD + 0.01, LOWER_MID_DARK_THRESHOLD - step)
+        LOWER_MID_DARK_THRESHOLD = new_value
+        print(f"Lower Mid Dark Threshold: {LOWER_MID_DARK_THRESHOLD:.2f}")
+        
+    elif setting_type == 'mid_mid_dark_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(UPPER_MID_DARK_THRESHOLD - 0.01, MID_MID_DARK_THRESHOLD + step)
+        else:
+            new_value = max(LOWER_MID_DARK_THRESHOLD + 0.01, MID_MID_DARK_THRESHOLD - step)
+        MID_MID_DARK_THRESHOLD = new_value
+        print(f"Mid Mid Dark Threshold: {MID_MID_DARK_THRESHOLD:.2f}")
+        
+    elif setting_type == 'upper_mid_dark_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(LOWER_MID_THRESHOLD - 0.01, UPPER_MID_DARK_THRESHOLD + step)
+        else:
+            new_value = max(MID_MID_DARK_THRESHOLD + 0.01, UPPER_MID_DARK_THRESHOLD - step)
+        UPPER_MID_DARK_THRESHOLD = new_value
+        print(f"Upper Mid Dark Threshold: {UPPER_MID_DARK_THRESHOLD:.2f}")
+        
     elif setting_type == 'lower_mid_threshold':
         step = THRESHOLD_STEP
         if increase:
-            new_value = min(MID_THRESHOLD - 0.01, LOWER_MID_THRESHOLD + step)
+            new_value = min(MID_LOWER_MID_THRESHOLD - 0.01, LOWER_MID_THRESHOLD + step)
         else:
-            new_value = max(UPPER_DARK_THRESHOLD + 0.01, LOWER_MID_THRESHOLD - step)
+            new_value = max(UPPER_MID_DARK_THRESHOLD + 0.01, LOWER_MID_THRESHOLD - step)
         LOWER_MID_THRESHOLD = new_value
         print(f"Lower Mid Threshold: {LOWER_MID_THRESHOLD:.2f}")
+        
+    elif setting_type == 'mid_lower_mid_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(UPPER_LOWER_MID_THRESHOLD - 0.01, MID_LOWER_MID_THRESHOLD + step)
+        else:
+            new_value = max(LOWER_MID_THRESHOLD + 0.01, MID_LOWER_MID_THRESHOLD - step)
+        MID_LOWER_MID_THRESHOLD = new_value
+        print(f"Mid Lower Mid Threshold: {MID_LOWER_MID_THRESHOLD:.2f}")
+        
+    elif setting_type == 'upper_lower_mid_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(MID_THRESHOLD - 0.01, UPPER_LOWER_MID_THRESHOLD + step)
+        else:
+            new_value = max(MID_LOWER_MID_THRESHOLD + 0.01, UPPER_LOWER_MID_THRESHOLD - step)
+        UPPER_LOWER_MID_THRESHOLD = new_value
+        print(f"Upper Lower Mid Threshold: {UPPER_LOWER_MID_THRESHOLD:.2f}")
         
     elif setting_type == 'mid_threshold':
         step = THRESHOLD_STEP
         if increase:
-            new_value = min(UPPER_MID_THRESHOLD - 0.01, MID_THRESHOLD + step)
+            new_value = min(LOWER_UPPER_MID_THRESHOLD - 0.01, MID_THRESHOLD + step)
         else:
-            new_value = max(LOWER_MID_THRESHOLD + 0.01, MID_THRESHOLD - step)
+            new_value = max(UPPER_LOWER_MID_THRESHOLD + 0.01, MID_THRESHOLD - step)
         MID_THRESHOLD = new_value
         print(f"Mid Threshold: {MID_THRESHOLD:.2f}")
+        
+    elif setting_type == 'lower_upper_mid_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(MID_UPPER_MID_THRESHOLD - 0.01, LOWER_UPPER_MID_THRESHOLD + step)
+        else:
+            new_value = max(MID_THRESHOLD + 0.01, LOWER_UPPER_MID_THRESHOLD - step)
+        LOWER_UPPER_MID_THRESHOLD = new_value
+        print(f"Lower Upper Mid Threshold: {LOWER_UPPER_MID_THRESHOLD:.2f}")
+        
+    elif setting_type == 'mid_upper_mid_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(UPPER_MID_THRESHOLD - 0.01, MID_UPPER_MID_THRESHOLD + step)
+        else:
+            new_value = max(LOWER_UPPER_MID_THRESHOLD + 0.01, MID_UPPER_MID_THRESHOLD - step)
+        MID_UPPER_MID_THRESHOLD = new_value
+        print(f"Mid Upper Mid Threshold: {MID_UPPER_MID_THRESHOLD:.2f}")
         
     elif setting_type == 'upper_mid_threshold':
         step = THRESHOLD_STEP
         if increase:
-            new_value = min(BRIGHT_THRESHOLD - 0.01, UPPER_MID_THRESHOLD + step)
+            new_value = min(LOWER_BRIGHT_MID_THRESHOLD - 0.01, UPPER_MID_THRESHOLD + step)
         else:
-            new_value = max(MID_THRESHOLD + 0.01, UPPER_MID_THRESHOLD - step)
+            new_value = max(MID_UPPER_MID_THRESHOLD + 0.01, UPPER_MID_THRESHOLD - step)
         UPPER_MID_THRESHOLD = new_value
         print(f"Upper Mid Threshold: {UPPER_MID_THRESHOLD:.2f}")
+        
+    elif setting_type == 'lower_bright_mid_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(MID_BRIGHT_MID_THRESHOLD - 0.01, LOWER_BRIGHT_MID_THRESHOLD + step)
+        else:
+            new_value = max(UPPER_MID_THRESHOLD + 0.01, LOWER_BRIGHT_MID_THRESHOLD - step)
+        LOWER_BRIGHT_MID_THRESHOLD = new_value
+        print(f"Lower Bright Mid Threshold: {LOWER_BRIGHT_MID_THRESHOLD:.2f}")
+        
+    elif setting_type == 'mid_bright_mid_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(UPPER_BRIGHT_MID_THRESHOLD - 0.01, MID_BRIGHT_MID_THRESHOLD + step)
+        else:
+            new_value = max(LOWER_BRIGHT_MID_THRESHOLD + 0.01, MID_BRIGHT_MID_THRESHOLD - step)
+        MID_BRIGHT_MID_THRESHOLD = new_value
+        print(f"Mid Bright Mid Threshold: {MID_BRIGHT_MID_THRESHOLD:.2f}")
+        
+    elif setting_type == 'upper_bright_mid_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(LOWER_BRIGHT_THRESHOLD - 0.01, UPPER_BRIGHT_MID_THRESHOLD + step)
+        else:
+            new_value = max(MID_BRIGHT_MID_THRESHOLD + 0.01, UPPER_BRIGHT_MID_THRESHOLD - step)
+        UPPER_BRIGHT_MID_THRESHOLD = new_value
+        print(f"Upper Bright Mid Threshold: {UPPER_BRIGHT_MID_THRESHOLD:.2f}")
+        
+    elif setting_type == 'lower_bright_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(MID_BRIGHT_THRESHOLD - 0.01, LOWER_BRIGHT_THRESHOLD + step)
+        else:
+            new_value = max(UPPER_BRIGHT_MID_THRESHOLD + 0.01, LOWER_BRIGHT_THRESHOLD - step)
+        LOWER_BRIGHT_THRESHOLD = new_value
+        print(f"Lower Bright Threshold: {LOWER_BRIGHT_THRESHOLD:.2f}")
+        
+    elif setting_type == 'mid_bright_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(UPPER_BRIGHT_THRESHOLD - 0.01, MID_BRIGHT_THRESHOLD + step)
+        else:
+            new_value = max(LOWER_BRIGHT_THRESHOLD + 0.01, MID_BRIGHT_THRESHOLD - step)
+        MID_BRIGHT_THRESHOLD = new_value
+        print(f"Mid Bright Threshold: {MID_BRIGHT_THRESHOLD:.2f}")
+        
+    elif setting_type == 'upper_bright_threshold':
+        step = THRESHOLD_STEP
+        if increase:
+            new_value = min(BRIGHT_THRESHOLD - 0.01, UPPER_BRIGHT_THRESHOLD + step)
+        else:
+            new_value = max(MID_BRIGHT_THRESHOLD + 0.01, UPPER_BRIGHT_THRESHOLD - step)
+        UPPER_BRIGHT_THRESHOLD = new_value
+        print(f"Upper Bright Threshold: {UPPER_BRIGHT_THRESHOLD:.2f}")
         
     elif setting_type == 'bright_threshold':
         step = THRESHOLD_STEP
         if increase:
             new_value = min(0.99, BRIGHT_THRESHOLD + step)
         else:
-            new_value = max(UPPER_MID_THRESHOLD + 0.01, MID_BRIGHT_THRESHOLD - step)
-        MID_BRIGHT_THRESHOLD = new_value
-        print(f"Mid Bright Threshold: {MID_BRIGHT_THRESHOLD:.2f}")
+            new_value = max(UPPER_BRIGHT_THRESHOLD + 0.01, BRIGHT_THRESHOLD - step)
+        BRIGHT_THRESHOLD = new_value
+        print(f"Bright Threshold: {BRIGHT_THRESHOLD:.2f}")
     
     # Save configuration
     save_config()
@@ -845,21 +1110,38 @@ def adjust_current_setting(setting_type, increase=True):
 def reset_config():
     """Reset configuration to defaults"""
     global SMOOTHING, REFRESH_RATE, CONTENT_HISTORY_SIZE
-    global DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
-    global LOWER_MID_THRESHOLD, MID_THRESHOLD, UPPER_MID_THRESHOLD, BRIGHT_THRESHOLD
+    global VERY_DARK_THRESHOLD, DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
+    global LOWER_MID_DARK_THRESHOLD, MID_MID_DARK_THRESHOLD, UPPER_MID_DARK_THRESHOLD, LOWER_MID_THRESHOLD
+    global MID_LOWER_MID_THRESHOLD, UPPER_LOWER_MID_THRESHOLD, MID_THRESHOLD, LOWER_UPPER_MID_THRESHOLD
+    global MID_UPPER_MID_THRESHOLD, UPPER_MID_THRESHOLD, LOWER_BRIGHT_MID_THRESHOLD, MID_BRIGHT_MID_THRESHOLD
+    global UPPER_BRIGHT_MID_THRESHOLD, LOWER_BRIGHT_THRESHOLD, MID_BRIGHT_THRESHOLD, UPPER_BRIGHT_THRESHOLD, BRIGHT_THRESHOLD
     
     # Reset to defaults
     SMOOTHING = 0.1
-    REFRESH_RATE = 0.01
+    REFRESH_RATE = 0.03
     CONTENT_HISTORY_SIZE = 3
-    DARK_THRESHOLD = 0.05
-    LOWER_DARK_THRESHOLD = 0.10
-    MID_DARK_THRESHOLD = 0.20
-    UPPER_DARK_THRESHOLD = 0.30
-    LOWER_MID_THRESHOLD = 0.45
-    MID_THRESHOLD = 0.50
-    UPPER_MID_THRESHOLD = 0.65
-    BRIGHT_THRESHOLD = 0.85
+    VERY_DARK_THRESHOLD = 0.00
+    DARK_THRESHOLD = 0.04
+    LOWER_DARK_THRESHOLD = 0.08
+    MID_DARK_THRESHOLD = 0.12
+    UPPER_DARK_THRESHOLD = 0.16
+    LOWER_MID_DARK_THRESHOLD = 0.20
+    MID_MID_DARK_THRESHOLD = 0.24
+    UPPER_MID_DARK_THRESHOLD = 0.28
+    LOWER_MID_THRESHOLD = 0.32
+    MID_LOWER_MID_THRESHOLD = 0.36
+    UPPER_LOWER_MID_THRESHOLD = 0.40
+    MID_THRESHOLD = 0.44
+    LOWER_UPPER_MID_THRESHOLD = 0.48
+    MID_UPPER_MID_THRESHOLD = 0.52
+    UPPER_MID_THRESHOLD = 0.56
+    LOWER_BRIGHT_MID_THRESHOLD = 0.60
+    MID_BRIGHT_MID_THRESHOLD = 0.64
+    UPPER_BRIGHT_MID_THRESHOLD = 0.68
+    LOWER_BRIGHT_THRESHOLD = 0.72
+    MID_BRIGHT_THRESHOLD = 0.76
+    UPPER_BRIGHT_THRESHOLD = 0.80
+    BRIGHT_THRESHOLD = 0.84
     
     print("Configuration reset to defaults")
     save_config()
@@ -929,15 +1211,29 @@ def keyboard_listener():
                     # Reset ALL scenes to defaults (using exact current defaults)
                     global custom_settings
                     custom_settings = {
-                        "VERY_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 0.96},
-                        "VERY_DARK": {"gamma": 3.1, "contrast": 1.6, "brightness": 1.0},
-                        "LOWER_DARK": {"gamma": 2.9, "contrast": 1.9, "brightness": 0.9},
-                        "MID_DARK": {"gamma": 2.6, "contrast": 1.8, "brightness": 0.8},
-                        "UPPER_DARK": {"gamma": 2.0, "contrast": 1.5, "brightness": 0.7},
-                        "LOWER_MID": {"gamma": 1.6, "contrast": 1.3, "brightness": 0.9},
-                        "MID": {"gamma": 1.1, "contrast": 1.1, "brightness": 1.0},
-                        "UPPER_MID": {"gamma": 1.1, "contrast": 1.0, "brightness": 1.0},
-                        "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0}
+                        "VERY_DARK": {"gamma": 5.0, "contrast": 2.7, "brightness": 1.1},
+                        "DARK": {"gamma": 4.8, "contrast": 2.5, "brightness": 1.08},
+                        "LOWER_DARK": {"gamma": 4.5, "contrast": 2.3, "brightness": 1.05},
+                        "MID_DARK": {"gamma": 4.2, "contrast": 2.1, "brightness": 1.02},
+                        "UPPER_DARK": {"gamma": 3.8, "contrast": 1.9, "brightness": 1.0},
+                        "LOWER_MID_DARK": {"gamma": 3.2, "contrast": 1.6, "brightness": 1.0},
+                        "MID_MID_DARK": {"gamma": 2.6, "contrast": 1.3, "brightness": 1.0},
+                        "UPPER_MID_DARK": {"gamma": 2.0, "contrast": 1.1, "brightness": 1.0},
+                        "LOWER_MID": {"gamma": 1.6, "contrast": 1.05, "brightness": 1.0},
+                        "MID_LOWER_MID": {"gamma": 1.3, "contrast": 1.02, "brightness": 1.0},
+                        "UPPER_LOWER_MID": {"gamma": 1.1, "contrast": 1.01, "brightness": 1.0},
+                        "MID": {"gamma": 1.1, "contrast": 1.0, "brightness": 1.0},
+                        "LOWER_UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "MID_UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "UPPER_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "LOWER_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "MID_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "UPPER_BRIGHT_MID": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "LOWER_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "MID_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "UPPER_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0},
+                        "VERY_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 0.96}
                     }
                     print(f"🔄 ALL scenes reset to defaults!")
                     save_profiles()
@@ -1100,43 +1396,13 @@ def analyze_screen():
         analysis_screen = full_screen.resize(ANALYSIS_RESOLUTION, Image.LANCZOS)
         full_array = np.array(analysis_screen)
         
-        # Sample screen areas
-        sample_ratios = [
-            (0.4, 0.4, 0.6, 0.6),  # Center
-            (0.01, 0.01, 0.08, 0.08),   # Top-left
-            (0.92, 0.01, 0.99, 0.08),   # Top-right
-            (0.01, 0.92, 0.08, 0.99),   # Bottom-left
-            (0.92, 0.92, 0.99, 0.99),   # Bottom-right
-            (0.46, 0.01, 0.54, 0.08),   # Top-center
-            (0.46, 0.92, 0.54, 0.99),   # Bottom-center
-            (0.01, 0.46, 0.08, 0.54),   # Left-center
-            (0.92, 0.46, 0.99, 0.54),   # Right-center
-            (0.3, 0.45, 0.38, 0.55),    # Center-left
-            (0.62, 0.45, 0.7, 0.55),    # Center-right
-            (0.22, 0.22, 0.28, 0.28),   # Top-left quadrant
-            (0.72, 0.22, 0.78, 0.28),   # Top-right quadrant
-            (0.22, 0.72, 0.28, 0.78),   # Bottom-left quadrant
-            (0.72, 0.72, 0.78, 0.78),   # Bottom-right quadrant
-        ]
+        # Calculate luma from entire downsampled screen
+        r_channel = full_array[:, :, 0] / 255.0
+        g_channel = full_array[:, :, 1] / 255.0  
+        b_channel = full_array[:, :, 2] / 255.0
         
-        all_luma_data = []
-        
-        for rx1, ry1, rx2, ry2 in sample_ratios:
-            x1, y1 = int(rx1 * screen_width), int(ry1 * screen_height)
-            x2, y2 = int(rx2 * screen_width), int(ry2 * screen_height)
-            
-            try:
-                region_array = full_array[y1:y2, x1:x2]
-                r_channel = region_array[:, :, 0] / 255.0
-                g_channel = region_array[:, :, 1] / 255.0  
-                b_channel = region_array[:, :, 2] / 255.0
-                
-                luma_bt709 = 0.2126 * r_channel + 0.7152 * g_channel + 0.0722 * b_channel
-                all_luma_data.extend(luma_bt709.flatten())
-            except:
-                continue
-        
-        luma_array = np.array(all_luma_data)
+        luma_bt709 = 0.2126 * r_channel + 0.7152 * g_channel + 0.0722 * b_channel
+        luma_array = luma_bt709.flatten()
         luma = np.mean(luma_array)
         contrast = np.std(luma_array)
         
@@ -1358,7 +1624,7 @@ def run_screenbooster():
     screen_width = user32.GetSystemMetrics(0)
     screen_height = user32.GetSystemMetrics(1)
     
-    print(f"Analysis: 15 sample areas every {REFRESH_RATE*1000:.0f}ms")
+    print(f"Analysis: Full screen every {REFRESH_RATE*1000:.0f}ms")
     print(f"Screen resolution: {screen_width}x{screen_height}")
     print(f"Smoothing: {SMOOTHING} (0.05=slow, 0.9=fast)")
     
