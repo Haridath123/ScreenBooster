@@ -7,7 +7,7 @@ This guide provides detailed instructions for manually editing ScreenBooster's p
 ## 📁 File Structure Overview
 
 ```
-ScreenBoosterV4/
+ScreenBooster/
 ├── main.py                    # Core application & performance parameters
 ├── screenbooster_profiles.json # Scene-specific gamma/contrast/brightness values
 ├── screenbooster_config.json  # Global configuration & thresholds

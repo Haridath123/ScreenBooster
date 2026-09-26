@@ -1224,7 +1224,7 @@ a = Analysis(
 
 exe = EXE(
     pyz, a.scripts, a.binaries, a.zipfiles, a.datas, [],
-    name='ScreenBoosterV7',  # Uses folder name
+    name='ScreenBooster',  # Uses generic name
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -1259,10 +1259,10 @@ manifest_content = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
   <assemblyIdentity
     version="1.0.0.0"
     processorArchitecture="*"
-    name="ScreenBoosterV5"
+    name="ScreenBooster"
     type="win32"
   />
-  <description>ScreenBooster V5 - Display Adjustment Tool</description>
+  <description>ScreenBooster - Display Adjustment Tool</description>
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
     <security>
       <requestedPrivileges>
@@ -1288,7 +1288,7 @@ with open(manifest_file, 'w', encoding='utf-8') as f:
 **Generated Release Directory**:
 ```
 release/
-├── ScreenBoosterV7.exe           # Main executable (~25MB)
+├── ScreenBooster.exe           # Main executable (~25MB)
 ├── screenbooster_profiles.json   # Profile settings
 ├── screenbooster_config.json     # Configuration
 ├── README.md                     # Complete documentation
@@ -1305,7 +1305,7 @@ release/
   "build_date": "2026-07-29T17:25:00",
   "build_type": "release",
   "python_version": "3.8.10",
-  "files": ["ScreenBoosterV5.exe", "screenbooster_profiles.json", ...]
+  "files": ["ScreenBooster.exe", "screenbooster_profiles.json", ...]
 }
 ```
 
@@ -1338,7 +1338,7 @@ windowed_mode = False
 **Temporary Files**:
 ```
 build/
-└── ScreenBoosterV5/
+└── ScreenBooster/
     ├── Analysis/
     ├── PYZ/
     └── EXE/
@@ -1347,7 +1347,7 @@ build/
 **Output Files**:
 ```
 dist/
-└── ScreenBoosterV5.exe  # Single file executable
+└── ScreenBooster.exe  # Single file executable
 ```
 
 **Cleanup**:
@@ -1366,13 +1366,13 @@ def clean_build_environment(self):
 ### Project Directory Structure
 
 ```
-ScreenBoosterV7/
+ScreenBooster/
 ├── main.py                          # Core application (1,676 lines)
 ├── build_exe.py                     # One-click EXE builder (439 lines)
 ├── requirements.txt                  # Python dependencies
 ├── screenbooster_profiles.json      # Profile settings
 ├── screenbooster_config.json        # Configuration
-├── ScreenBoosterV7.spec             # PyInstaller spec file
+├── ScreenBooster.spec             # PyInstaller spec file
 ├── main.spec                        # Alternative spec file
 ├── build.bat                        # Windows batch build script
 ├── build.ps1                        # PowerShell build script

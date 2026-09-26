@@ -5,7 +5,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://microsoft.com/windows)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/yourusername/ScreenBoosterV4)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/yourusername/ScreenBooster)
 
 ## 🎯 What is ScreenBooster V4?
 
@@ -24,15 +24,15 @@ ScreenBooster V4 is an intelligent auto-exposure system that dynamically adjusts
 ## 🚀 Quick Start
 
 ### For Users (Standalone EXE)
-1. 📥 Download from [Releases](https://github.com/yourusername/ScreenBoosterV4/releases)
+1. 📥 Download from [Releases](https://github.com/yourusername/ScreenBooster/releases)
 2. 📂 Extract to any folder
-3. 🎮 Run `ScreenBoosterV4.exe`
+3. 🎮 Run `ScreenBooster.exe`
 4. ⚙️ Choose your profile and start enhancing!
 
 ### For Developers
 ```bash
-git clone https://github.com/yourusername/ScreenBoosterV4.git
-cd ScreenBoosterV4
+git clone https://github.com/yourusername/ScreenBooster.git
+cd ScreenBooster
 pip install -r requirements.txt
 python main.py
 ```
@@ -106,7 +106,7 @@ Hundreds of hours of development, testing, and community feedback went into crea
 ## 📁 Project Structure
 
 ```
-ScreenBoosterV4/
+ScreenBooster/
 ├── 📄 main.py                    # Core application (640+ lines)
 ├── 📄 build_exe.py              # One-click EXE builder
 ├── 📄 requirements.txt           # Python dependencies
@@ -115,7 +115,7 @@ ScreenBoosterV4/
 ├── 📚 README.md                  # Complete documentation
 ├── 📚 EXTREME_CUSTOMIZATION.md   # Advanced tuning guide
 ├── 📚 BUILD_GUIDE.md             # Build instructions
-└── 🔧 ScreenBoosterV4.spec       # PyInstaller configuration
+└── 🔧 ScreenBooster.spec       # PyInstaller configuration
 ```
 
 ## 🎮 Usage Examples
@@ -137,16 +137,16 @@ ScreenBoosterV4/
 ## 🚀 Installation & Setup
 
 ### Option 1: Download EXE (Recommended for Users)
-1. Go to [Releases](https://github.com/yourusername/ScreenBoosterV4/releases)
-2. Download `ScreenBoosterV4.zip`
-3. Extract and run `ScreenBoosterV4.exe`
+1. Go to [Releases](https://github.com/yourusername/ScreenBooster/releases)
+2. Download `ScreenBooster.zip`
+3. Extract and run `ScreenBooster.exe`
 4. No installation required!
 
 ### Option 2: Build from Source (Developers)
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/ScreenBoosterV4.git
-cd ScreenBoosterV4
+git clone https://github.com/yourusername/ScreenBooster.git
+cd ScreenBooster
 
 # Install dependencies
 pip install -r requirements.txt
@@ -188,16 +188,16 @@ python build_exe.py
 
 Contributions are welcome! Here's how you can help:
 
-1. 🐛 **Report Issues**: Found a bug? [Open an issue](https://github.com/yourusername/ScreenBoosterV4/issues)
-2. 💡 **Feature Requests**: Have an idea? [Suggest it here](https://github.com/yourusername/ScreenBoosterV4/discussions)
+1. 🐛 **Report Issues**: Found a bug? [Open an issue](https://github.com/yourusername/ScreenBooster/issues)
+2. 💡 **Feature Requests**: Have an idea? [Suggest it here](https://github.com/yourusername/ScreenBooster/discussions)
 3. 🔧 **Pull Requests**: Fix a bug or add a feature
 4. 📚 **Documentation**: Help improve the docs
 
 ### Development Setup
 ```bash
 # Fork and clone
-git clone https://github.com/yourusername/ScreenBoosterV4.git
-cd ScreenBoosterV4
+git clone https://github.com/yourusername/ScreenBooster.git
+cd ScreenBooster
 
 # Create virtual environment
 python -m venv venv
@@ -247,8 +247,8 @@ git push origin your-branch
 - 📖 [Documentation](README.md)
 - 🔧 [Advanced Customization](EXTREME_CUSTOMIZATION.md)
 - 🏗️ [Build Instructions](BUILD_GUIDE.md)
-- 🐛 [Issue Tracker](https://github.com/yourusername/ScreenBoosterV4/issues)
-- 💬 [Discussions](https://github.com/yourusername/ScreenBoosterV4/discussions)
+- 🐛 [Issue Tracker](https://github.com/yourusername/ScreenBooster/issues)
+- 💬 [Discussions](https://github.com/yourusername/ScreenBooster/discussions)
 
 ---
 
@@ -256,7 +256,7 @@ git push origin your-branch
 
 **Download ScreenBooster V4 today and see your content in a whole new light!**
 
-[![Download](https://img.shields.io/badge/Download-EXE-brightgreen.svg)](https://github.com/yourusername/ScreenBoosterV4/releases/latest)
+[![Download](https://img.shields.io/badge/Download-EXE-brightgreen.svg)](https://github.com/yourusername/ScreenBooster/releases/latest)
 [![View Docs](https://img.shields.io/badge/View-Documentation-blue.svg)](README.md)
 [![Build Status](https://img.shields.io/badge/Build-Your%20Own-orange.svg)](BUILD_GUIDE.md)
 

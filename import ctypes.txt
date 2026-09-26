@@ -1573,7 +1573,7 @@ def main():
         print("display settings. Without admin rights, the screen adjustments")
         print("will not work on most Windows systems.")
         print("\nPlease:")
-        print("1. Right-click on ScreenBoosterV5.exe")
+        print("1. Right-click on ScreenBooster.exe")
         print("2. Select 'Run as administrator'")
         print("3. Or rebuild the EXE with the updated build script")
         print("\n" + "="*60)

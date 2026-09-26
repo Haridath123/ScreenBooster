@@ -49,7 +49,7 @@ def check_admin_privileges():
         return False
 
 def apply_settings(gamma, contrast, brightness=1.0):
-    """Apply hardware gamma, contrast, and brightness adjustments"""
+    """Apply hardware gamma, contrast, and brightness adjustments to all monitors"""
     try:
         ramp = (ctypes.c_ushort * 768)()
         
@@ -79,11 +79,47 @@ def apply_settings(gamma, contrast, brightness=1.0):
             res = int(gamma_corrected * 65535.0)
             ramp[i] = ramp[i + 256] = ramp[i + 512] = res
         
+        # Store monitor device names
+        monitor_devices = []
+        
+        # Callback to enumerate display devices
+        def monitor_callback(hmonitor, hdc, rect, data):
+            monitor_info = ctypes.create_string_buffer(104)  # MONITORINFOEX size
+            ctypes.memset(monitor_info, 0, 104)
+            monitor_info_raw = ctypes.cast(monitor_info, ctypes.POINTER(ctypes.c_int))
+            monitor_info_raw[0] = 104  # cbSize
+            
+            if user32.GetMonitorInfoW(hmonitor, monitor_info):
+                # Extract device name from MONITORINFOEX (offset 40)
+                device_name = ctypes.wstring_at(ctypes.addressof(monitor_info) + 40)
+                monitor_devices.append(device_name)
+            return 1
+        
+        # Define callback type
+        MONITORENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_int, ctypes.c_ulong, ctypes.c_ulong, ctypes.POINTER(ctypes.c_int), ctypes.c_ulong)
+        
+        # Enumerate all monitors
+        user32.EnumDisplayMonitors(None, None, MONITORENUMPROC(monitor_callback), 0)
+        
+        # Apply gamma ramp to each monitor device
+        success_count = 0
+        for device_name in monitor_devices:
+            try:
+                hdc = gdi32.CreateDCW(device_name, None, None, None)
+                if hdc:
+                    result = gdi32.SetDeviceGammaRamp(hdc, ctypes.byref(ramp))
+                    gdi32.DeleteDC(hdc)
+                    if result:
+                        success_count += 1
+            except Exception as e:
+                print(f"Error applying to {device_name}: {e}")
+        
+        # Also apply to primary DC as fallback
         hdc = user32.GetDC(None)
-        result = gdi32.SetDeviceGammaRamp(hdc, ctypes.byref(ramp))
+        gdi32.SetDeviceGammaRamp(hdc, ctypes.byref(ramp))
         user32.ReleaseDC(None, hdc)
         
-        return result
+        return success_count > 0
     except Exception as e:
         print(f"Error applying display settings: {e}")
         return False
@@ -141,7 +177,7 @@ def main():
         import signal
         signal.signal(signal.SIGINT, signal_handler)
         
-        # Get screen resolution
+        # Get primary monitor resolution
         screen_width = user32.GetSystemMetrics(0)
         screen_height = user32.GetSystemMetrics(1)
         
@@ -150,8 +186,8 @@ def main():
         print(f"Smoothing: {SMOOTHING} (lower = smoother transitions)\n")
         
         while running:
-            # Capture screen
-            full_screen = ImageGrab.grab(bbox=(0, 0, screen_width, screen_height)).convert('RGB')
+            # Capture screen (ImageGrab.grab() without bbox captures primary monitor)
+            full_screen = ImageGrab.grab().convert('RGB')
             analysis_screen = full_screen.resize(ANALYSIS_RESOLUTION, Image.LANCZOS)
             
             # Calculate luma

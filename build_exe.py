@@ -117,10 +117,10 @@ class ScreenBoosterBuilder:
   <assemblyIdentity
     version="1.0.0.0"
     processorArchitecture="*"
-    name="ScreenBoosterV5"
+    name="ScreenBooster"
     type="win32"
   />
-  <description>ScreenBooster V5 - Display Adjustment Tool</description>
+  <description>ScreenBooster - Display Adjustment Tool</description>
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
     <security>
       <requestedPrivileges>
@@ -305,7 +305,7 @@ exe = EXE(
 This application modifies display settings using Windows API calls that require elevated privileges. Without admin rights, the screen adjustments will not work on most Windows systems.
 
 ### How to run as Administrator:
-1. Right-click on ScreenBoosterV5.exe
+1. Right-click on ScreenBooster.exe
 2. Select "Run as administrator"
 3. Click "Yes" when Windows asks for permission
 
@@ -317,7 +317,7 @@ python build_exe.py
 
 ## Installation
 1. Extract all files to a folder
-2. Run ScreenBoosterV5.exe **as Administrator**
+2. Run ScreenBooster.exe **as Administrator**
 3. No installation required!
 
 ## First Run
@@ -327,7 +327,7 @@ python build_exe.py
 4. Use hotkeys to fine-tune settings
 
 ## Files Included
-- ScreenBoosterV5.exe - Main application (run as admin!)
+- ScreenBooster.exe - Main application (run as admin!)
 - screenbooster_profiles.json - Profile settings
 - screenbooster_config.json - Configuration
 - README.md - Complete documentation

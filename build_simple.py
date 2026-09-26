@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Simple build script for simple_luma_booster.py
-Builds ScreenBoosterV8.exe
+Builds ScreenBooster.exe
 """
 
 import subprocess
@@ -10,8 +10,8 @@ import os
 from pathlib import Path
 
 def build():
-    """Build simple_luma_booster.py into ScreenBoosterV8.exe"""
-    print("Building ScreenBoosterV8.exe from simple_luma_booster.py...")
+    """Build simple_luma_booster.py into ScreenBooster.exe"""
+    print("Building ScreenBooster.exe from simple_luma_booster.py...")
     
     # Clean previous builds
     for dir_name in ['build', 'dist']:
@@ -23,7 +23,7 @@ def build():
     cmd = [
         "pyinstaller",
         "--onefile",
-        "--name=ScreenBoosterV8",
+        "--name=ScreenBooster",
         "--console",
         "simple_luma_booster.py"
     ]
@@ -31,7 +31,7 @@ def build():
     try:
         result = subprocess.run(cmd, check=True)
         print("\n✅ Build successful!")
-        print("📦 EXE location: dist/ScreenBoosterV8.exe")
+        print("📦 EXE location: dist/ScreenBooster.exe")
         return True
     except subprocess.CalledProcessError as e:
         print(f"\n❌ Build failed: {e}")
