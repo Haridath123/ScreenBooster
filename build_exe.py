@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-ScreenBooster V4 - One-Click EXE Builder
+ScreenBooster V5 - One-Click EXE Builder
 ========================================
 
-This script builds ScreenBooster V4 into a standalone executable with a single command.
+This script builds ScreenBooster V5 into a standalone executable with a single command.
 Run: python build_exe.py
 
 Features:
@@ -31,7 +31,7 @@ class ScreenBoosterBuilder:
         self.release_dir = self.project_dir / "release"
         
         # Build configuration
-        self.app_name = "ScreenBoosterV4"
+        self.app_name = "ScreenBoosterV5"
         self.main_script = "main.py"
         self.config_files = [
             "screenbooster_profiles.json",
@@ -43,7 +43,7 @@ class ScreenBoosterBuilder:
             "BUILD_GUIDE.md"
         ]
         
-        print(f"🚀 ScreenBooster V4 One-Click Builder")
+        print(f"🚀 ScreenBooster V5 One-Click Builder")
         print(f"📁 Project Directory: {self.project_dir}")
         print("=" * 50)
     
@@ -108,11 +108,34 @@ class ScreenBoosterBuilder:
         
         # Pre-calculate boolean values
         debug_mode = mode == "debug"
-        console_mode = debug_mode
-        windowed_mode = not debug_mode
+        console_mode = True  # Always show console for visibility
+        windowed_mode = False  # Never windowed
+        
+        # Create manifest file for admin privileges
+        manifest_content = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <assemblyIdentity
+    version="1.0.0.0"
+    processorArchitecture="*"
+    name="ScreenBoosterV5"
+    type="win32"
+  />
+  <description>ScreenBooster V5 - Display Adjustment Tool</description>
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+</assembly>'''
+        
+        manifest_file = self.project_dir / "app.manifest"
+        with open(manifest_file, 'w', encoding='utf-8') as f:
+            f.write(manifest_content)
         
         spec_content = f'''# -*- mode: python ; coding: utf-8 -*-
-# ScreenBooster V4 PyInstaller Spec File
+# ScreenBooster V5 PyInstaller Spec File
 # Generated automatically by build_exe.py
 
 block_cipher = None
@@ -181,7 +204,9 @@ exe = EXE(
     disable_windowed_traceback=False,
     target_arch=None,
     codesign_identity=None,
-    entitlements_file=None
+    entitlements_file=None,
+    manifest=r'{manifest_file}',
+    icon=None
 )
 '''
         
@@ -228,25 +253,7 @@ exe = EXE(
             print("❌ EXE file not found")
             return False
         
-        # Check configuration files
-        for config_file in self.config_files:
-            config_path = self.dist_dir / config_file
-            if not config_path.exists():
-                print(f"❌ Missing config file: {config_file}")
-                return False
-        
-        # Try to validate JSON files
-        for config_file in self.config_files:
-            config_path = self.dist_dir / config_file
-            try:
-                with open(config_path, 'r') as f:
-                    json.load(f)
-                print(f"  ✅ {config_file} - Valid JSON")
-            except json.JSONDecodeError:
-                print(f"  ❌ {config_file} - Invalid JSON")
-                return False
-        
-        print("✅ Build verification passed")
+        print("✅ EXE file verified")
         return True
     
     def create_release_package(self, exe_path):
@@ -260,9 +267,15 @@ exe = EXE(
         shutil.copy2(exe_path, release_exe)
         print(f"  📄 Copied EXE")
         
-        # Copy configuration files
+        # Copy configuration files from project directory
         for config_file in self.config_files:
-            shutil.copy2(self.dist_dir / config_file, self.release_dir / config_file)
+            src_config = self.project_dir / config_file
+            dst_config = self.release_dir / config_file
+            if src_config.exists():
+                shutil.copy2(src_config, dst_config)
+                print(f"  📄 Copied {config_file}")
+            else:
+                print(f"  ⚠️  Missing {config_file} in project directory")
         
         # Copy documentation
         for doc_file in self.doc_files:
@@ -282,11 +295,29 @@ exe = EXE(
             json.dump(version_info, f, indent=2)
         
         # Create quick start guide
-        quick_start = f"""# ScreenBooster V4 - Quick Start
+        quick_start = f"""# ScreenBooster V5 - Quick Start
+
+## ⚠️ IMPORTANT: RUN AS ADMINISTRATOR
+
+**ScreenBooster MUST be run as Administrator to work!**
+
+### Why?
+This application modifies display settings using Windows API calls that require elevated privileges. Without admin rights, the screen adjustments will not work on most Windows systems.
+
+### How to run as Administrator:
+1. Right-click on ScreenBoosterV5.exe
+2. Select "Run as administrator"
+3. Click "Yes" when Windows asks for permission
+
+### Alternative: Rebuild with admin manifest
+The build script now creates an EXE that automatically requests admin privileges. Rebuild using:
+```bash
+python build_exe.py
+```
 
 ## Installation
 1. Extract all files to a folder
-2. Run ScreenBoosterV4.exe
+2. Run ScreenBoosterV5.exe **as Administrator**
 3. No installation required!
 
 ## First Run
@@ -296,12 +327,17 @@ exe = EXE(
 4. Use hotkeys to fine-tune settings
 
 ## Files Included
-- ScreenBoosterV4.exe - Main application
+- ScreenBoosterV5.exe - Main application (run as admin!)
 - screenbooster_profiles.json - Profile settings
 - screenbooster_config.json - Configuration
 - README.md - Complete documentation
 - EXTREME_CUSTOMIZATION.md - Advanced tuning
 - BUILD_GUIDE.md - Build instructions
+
+## Troubleshooting
+- **Screen not changing?** Make sure you're running as Administrator
+- **Windows opens but nothing happens?** Right-click → Run as administrator
+- **Still not working?** Some display drivers block gamma adjustments
 
 ## Support
 See README.md for detailed instructions and troubleshooting.

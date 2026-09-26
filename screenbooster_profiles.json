@@ -42,7 +42,7 @@
     },
     "LOWER_MID": {
       "gamma": 1.6,
-      "contrast": 1.05,
+      "contrast": 1.1500000000000001,
       "brightness": 1.0
     },
     "MID_LOWER_MID": {

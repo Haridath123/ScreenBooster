@@ -1,0 +1,227 @@
+{
+  "game": {
+    "VERY_DARK": {
+      "gamma": 5.0,
+      "contrast": 2.7,
+      "brightness": 1.1
+    },
+    "DARK": {
+      "gamma": 4.8,
+      "contrast": 2.5,
+      "brightness": 1.08
+    },
+    "LOWER_DARK": {
+      "gamma": 4.5,
+      "contrast": 2.3,
+      "brightness": 1.05
+    },
+    "MID_DARK": {
+      "gamma": 4.2,
+      "contrast": 2.1,
+      "brightness": 1.02
+    },
+    "UPPER_DARK": {
+      "gamma": 3.8,
+      "contrast": 1.9,
+      "brightness": 1.0
+    },
+    "LOWER_MID_DARK": {
+      "gamma": 3.2,
+      "contrast": 1.6,
+      "brightness": 1.0
+    },
+    "MID_MID_DARK": {
+      "gamma": 2.6,
+      "contrast": 1.3,
+      "brightness": 1.0
+    },
+    "UPPER_MID_DARK": {
+      "gamma": 2.0,
+      "contrast": 1.1,
+      "brightness": 1.0
+    },
+    "LOWER_MID": {
+      "gamma": 1.6,
+      "contrast": 1.1500000000000001,
+      "brightness": 1.0
+    },
+    "MID_LOWER_MID": {
+      "gamma": 1.3,
+      "contrast": 1.02,
+      "brightness": 1.0
+    },
+    "UPPER_LOWER_MID": {
+      "gamma": 1.1,
+      "contrast": 1.01,
+      "brightness": 1.0
+    },
+    "MID": {
+      "gamma": 1.1,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "LOWER_UPPER_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "MID_UPPER_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "UPPER_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 0.8999999999999999
+    },
+    "LOWER_BRIGHT_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "MID_BRIGHT_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "UPPER_BRIGHT_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "LOWER_BRIGHT": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "MID_BRIGHT": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "UPPER_BRIGHT": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "BRIGHT": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    }
+  },
+  "movie": {
+    "VERY_DARK": {
+      "gamma": 5.0,
+      "contrast": 2.7,
+      "brightness": 1.4
+    },
+    "DARK": {
+      "gamma": 4.8,
+      "contrast": 2.5,
+      "brightness": 1.35
+    },
+    "LOWER_DARK": {
+      "gamma": 4.5,
+      "contrast": 2.3,
+      "brightness": 1.3
+    },
+    "MID_DARK": {
+      "gamma": 4.2,
+      "contrast": 2.1,
+      "brightness": 1.25
+    },
+    "UPPER_DARK": {
+      "gamma": 3.8,
+      "contrast": 1.9,
+      "brightness": 1.2
+    },
+    "LOWER_MID_DARK": {
+      "gamma": 3.4,
+      "contrast": 1.7,
+      "brightness": 1.15
+    },
+    "MID_MID_DARK": {
+      "gamma": 3.0,
+      "contrast": 1.5,
+      "brightness": 1.1
+    },
+    "UPPER_MID_DARK": {
+      "gamma": 2.6,
+      "contrast": 1.3,
+      "brightness": 1.08
+    },
+    "LOWER_MID": {
+      "gamma": 2.2,
+      "contrast": 1.2,
+      "brightness": 1.05
+    },
+    "MID_LOWER_MID": {
+      "gamma": 1.8,
+      "contrast": 1.1,
+      "brightness": 1.03
+    },
+    "UPPER_LOWER_MID": {
+      "gamma": 1.5,
+      "contrast": 1.08,
+      "brightness": 1.01
+    },
+    "MID": {
+      "gamma": 1.3,
+      "contrast": 1.05,
+      "brightness": 1.0
+    },
+    "LOWER_UPPER_MID": {
+      "gamma": 1.2,
+      "contrast": 1.05,
+      "brightness": 1.0
+    },
+    "MID_UPPER_MID": {
+      "gamma": 1.1,
+      "contrast": 1.2,
+      "brightness": 1.0
+    },
+    "UPPER_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "LOWER_BRIGHT_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "MID_BRIGHT_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "UPPER_BRIGHT_MID": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 0.95
+    },
+    "LOWER_BRIGHT": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "MID_BRIGHT": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "UPPER_BRIGHT": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    },
+    "BRIGHT": {
+      "gamma": 1.0,
+      "contrast": 1.0,
+      "brightness": 1.0
+    }
+  },
+  "current_profile": "game"
+}

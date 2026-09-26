@@ -1,6 +1,6 @@
 import ctypes
 import numpy as np
-from PIL import ImageGrab
+from PIL import ImageGrab, Image
 import time
 import sys
 import json
@@ -8,6 +8,13 @@ import os
 from collections import deque
 import threading
 import keyboard
+
+def check_admin_privileges():
+    """Check if running with administrator privileges"""
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
 
 def safe_input(prompt=""):
     """Safe input function that handles missing stdin in windowed mode"""
@@ -27,6 +34,10 @@ user32 = ctypes.windll.user32
 SMOOTHING = 0.1          # Transition speed (0.05-0.9) - reduced for smoother transitions
 REFRESH_RATE = 0.03       # Screen analysis interval (seconds) - reduced from 0.01 to 0.03 (33Hz vs 100Hz)
 CONTENT_HISTORY_SIZE = 3 # Frames to analyze
+
+# Performance optimization settings
+ANALYSIS_RESOLUTION = (960, 540)  # 4x downscale from 1920x1080
+ENABLE_DOWNSCALING = True            # Always enabled
 
 # Scene thresholds (23 total scenes with equal distribution)
 VERY_DARK_THRESHOLD = 0.00      # Below this = very dark scene
@@ -54,7 +65,6 @@ BRIGHT_THRESHOLD = 0.84            # Above this = bright scene
 
 # Performance optimizations
 SKIP_FRAMES = 2           # Skip every N frames for analysis (0 = no skip)
-FAST_MODE = True          # Enable fast mode optimizations
 REGION_SAMPLE_SIZE = 0.05 # Sample smaller regions (5% of original size)
 
 # Configuration adjustment step sizes
@@ -310,7 +320,6 @@ def show_config_menu():
     print(f"\nCurrent Settings:")
     print(f"  Smoothing: {SMOOTHING:.3f} (transition speed)")
     print(f"  Refresh Rate: {REFRESH_RATE:.3f}s ({1000/REFRESH_RATE:.0f}Hz)")
-    print(f"  Fast Mode: {'ON' if FAST_MODE else 'OFF'}")
     print(f"  Skip Frames: {SKIP_FRAMES} (0 = no skip)")
     print(f"\nScene Thresholds:")
     print(f"  Very Dark: < {DARK_THRESHOLD:.2f}")
@@ -326,17 +335,16 @@ def show_config_menu():
     print("Options:")
     print("1. Adjust Smoothing")
     print("2. Adjust Refresh Rate")
-    print("3. Toggle Fast Mode (Current: " + ('ON' if FAST_MODE else 'OFF') + ")")
-    print("4. Adjust Skip Frames")
-    print("5. Adjust Dark Threshold")
-    print("6. Adjust Lower Dark Threshold")
-    print("7. Adjust Mid Dark Threshold")
-    print("8. Adjust Upper Dark Threshold")
-    print("9. Adjust Lower Mid Threshold")
-    print("10. Adjust Mid Threshold")
-    print("11. Adjust Upper Mid Threshold")
-    print("12. Adjust Bright Threshold")
-    print("13. Reset Configuration to Defaults")
+    print("3. Adjust Skip Frames")
+    print("4. Adjust Dark Threshold")
+    print("5. Adjust Lower Dark Threshold")
+    print("6. Adjust Mid Dark Threshold")
+    print("7. Adjust Upper Dark Threshold")
+    print("8. Adjust Lower Mid Threshold")
+    print("9. Adjust Mid Threshold")
+    print("10. Adjust Upper Mid Threshold")
+    print("11. Adjust Bright Threshold")
+    print("12. Reset Configuration to Defaults")
     print("0. Back to Main Menu")
     print("="*60)
 
@@ -417,13 +425,13 @@ def adjust_value_menu(current_value, min_val, max_val, step, name):
 
 def config_menu():
     """Handle configuration menu"""
-    global SMOOTHING, REFRESH_RATE, FAST_MODE, SKIP_FRAMES
+    global SMOOTHING, REFRESH_RATE, SKIP_FRAMES
     global DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
     global LOWER_MID_THRESHOLD, MID_THRESHOLD, UPPER_MID_THRESHOLD, BRIGHT_THRESHOLD
     
     while True:
         show_config_menu()
-        choice = safe_input("\nEnter choice (0-13): ").strip()
+        choice = safe_input("\nEnter choice (0-12): ").strip()
         
         if choice == "0":
             break
@@ -432,29 +440,24 @@ def config_menu():
         elif choice == "2":
             REFRESH_RATE = adjust_value_menu(REFRESH_RATE, 0.001, 0.1, REFRESH_RATE_STEP, "Refresh Rate (seconds)")
         elif choice == "3":
-            FAST_MODE = not FAST_MODE
-            print(f"Fast Mode: {'ON' if FAST_MODE else 'OFF'}")
-            print("Fast Mode captures smaller areas and uses simplified analysis")
-            safe_input("Press Enter to continue...")
-        elif choice == "4":
             SKIP_FRAMES = int(adjust_value_menu(SKIP_FRAMES, 0, 10, 1, "Skip Frames"))
-        elif choice == "5":
+        elif choice == "4":
             DARK_THRESHOLD = adjust_value_menu(DARK_THRESHOLD, 0.01, LOWER_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Dark Threshold")
-        elif choice == "6":
+        elif choice == "5":
             LOWER_DARK_THRESHOLD = adjust_value_menu(LOWER_DARK_THRESHOLD, DARK_THRESHOLD + 0.01, MID_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Dark Threshold")
-        elif choice == "7":
+        elif choice == "6":
             MID_DARK_THRESHOLD = adjust_value_menu(MID_DARK_THRESHOLD, LOWER_DARK_THRESHOLD + 0.01, UPPER_DARK_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Dark Threshold")
-        elif choice == "8":
+        elif choice == "7":
             UPPER_DARK_THRESHOLD = adjust_value_menu(UPPER_DARK_THRESHOLD, MID_DARK_THRESHOLD + 0.01, LOWER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Dark Threshold")
-        elif choice == "9":
+        elif choice == "8":
             LOWER_MID_THRESHOLD = adjust_value_menu(LOWER_MID_THRESHOLD, UPPER_DARK_THRESHOLD + 0.01, MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Lower Mid Threshold")
-        elif choice == "10":
+        elif choice == "9":
             MID_THRESHOLD = adjust_value_menu(MID_THRESHOLD, LOWER_MID_THRESHOLD + 0.01, UPPER_MID_THRESHOLD - 0.01, THRESHOLD_STEP, "Mid Threshold")
-        elif choice == "11":
+        elif choice == "10":
             UPPER_MID_THRESHOLD = adjust_value_menu(UPPER_MID_THRESHOLD, MID_THRESHOLD + 0.01, BRIGHT_THRESHOLD - 0.01, THRESHOLD_STEP, "Upper Mid Threshold")
-        elif choice == "12":
+        elif choice == "11":
             BRIGHT_THRESHOLD = adjust_value_menu(BRIGHT_THRESHOLD, UPPER_MID_THRESHOLD + 0.01, 0.99, THRESHOLD_STEP, "Bright Threshold")
-        elif choice == "13":
+        elif choice == "12":
             if safe_input("Reset all configuration to defaults? (y/n): ").lower() == 'y':
                 reset_config()
         else:
@@ -572,7 +575,7 @@ def reset_all_defaults():
 
 def load_config():
     """Load configuration from file"""
-    global SMOOTHING, REFRESH_RATE, CONTENT_HISTORY_SIZE, FAST_MODE, SKIP_FRAMES
+    global SMOOTHING, REFRESH_RATE, CONTENT_HISTORY_SIZE, SKIP_FRAMES
     global DARK_THRESHOLD, LOWER_DARK_THRESHOLD, MID_DARK_THRESHOLD, UPPER_DARK_THRESHOLD
     global LOWER_MID_THRESHOLD, MID_THRESHOLD, UPPER_MID_THRESHOLD, BRIGHT_THRESHOLD
     
@@ -584,7 +587,6 @@ def load_config():
                 SMOOTHING = config.get('SMOOTHING', SMOOTHING)
                 REFRESH_RATE = config.get('REFRESH_RATE', REFRESH_RATE)
                 CONTENT_HISTORY_SIZE = config.get('CONTENT_HISTORY_SIZE', CONTENT_HISTORY_SIZE)
-                FAST_MODE = config.get('FAST_MODE', FAST_MODE)
                 SKIP_FRAMES = config.get('SKIP_FRAMES', SKIP_FRAMES)
                 DARK_THRESHOLD = config.get('DARK_THRESHOLD', DARK_THRESHOLD)
                 LOWER_DARK_THRESHOLD = config.get('LOWER_DARK_THRESHOLD', LOWER_DARK_THRESHOLD)
@@ -604,7 +606,6 @@ def save_config():
         'SMOOTHING': SMOOTHING,
         'REFRESH_RATE': REFRESH_RATE,
         'CONTENT_HISTORY_SIZE': CONTENT_HISTORY_SIZE,
-        'FAST_MODE': FAST_MODE,
         'SKIP_FRAMES': SKIP_FRAMES,
         'DARK_THRESHOLD': DARK_THRESHOLD,
         'LOWER_DARK_THRESHOLD': LOWER_DARK_THRESHOLD,
@@ -1058,169 +1059,97 @@ def apply_settings(gamma, contrast, brightness=1.0):
             ramp[i] = ramp[i + 256] = ramp[i + 512] = res
         
         hdc = user32.GetDC(None)
-        if gdi32.SetDeviceGammaRamp(hdc, ctypes.byref(ramp)):
-            user32.ReleaseDC(None, hdc)
-            return True
+        result = gdi32.SetDeviceGammaRamp(hdc, ctypes.byref(ramp))
         user32.ReleaseDC(None, hdc)
+        
+        if result:
+            return True
+        else:
+            print("⚠️  WARNING: Gamma ramp change failed - Display driver may not support gamma adjustment")
+            print("   This usually requires Administrator privileges")
+            return False
     except Exception as e:
-        print(f"Error: {e}")
-    return False
+        print(f"❌ Error applying display settings: {e}")
+        print("   This application requires Administrator privileges to modify display settings")
+        return False
 
 def analyze_screen():
-    """Analyze multiple screen areas dynamically based on current resolution with optimizations"""
+    """Analyze screen with 4x downscaling for performance"""
     global frame_skip_counter, last_analysis_time
     
     try:
-        # Frame skipping - skip analysis every N frames
+        # Frame skipping
         if SKIP_FRAMES > 0:
             frame_skip_counter += 1
             if frame_skip_counter <= SKIP_FRAMES:
-                # Return cached values or simple estimate
                 return 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5
             frame_skip_counter = 0
         
-        # Rate limiting - don't analyze too frequently
+        # Rate limiting
         current_time = time.time()
         if current_time - last_analysis_time < REFRESH_RATE:
-            time.sleep(0.001)  # Tiny sleep to yield CPU
+            time.sleep(0.001)
         last_analysis_time = current_time
         
-        # Dynamically get current screen resolution
+        # Get screen resolution
         screen_width = user32.GetSystemMetrics(0)
         screen_height = user32.GetSystemMetrics(1)
         
-        # Fast mode optimizations
-        if FAST_MODE:
-            # Capture smaller area for faster processing
-            sample_width = int(screen_width * 0.3)  # 30% of width
-            sample_height = int(screen_height * 0.3)  # 30% of height
-            x_offset = (screen_width - sample_width) // 2
-            y_offset = (screen_height - sample_height) // 2
-            
-            # Single center capture instead of full screen
-            full_screen = ImageGrab.grab(bbox=(x_offset, y_offset, x_offset + sample_width, y_offset + sample_height)).convert('RGB')
-            full_array = np.array(full_screen)
-            
-            # Simplified sampling - just center and corners
-            sample_ratios = [
-                (0.3, 0.3, 0.7, 0.7),    # Center
-                (0.05, 0.05, 0.15, 0.15), # Top-left
-                (0.85, 0.05, 0.95, 0.15), # Top-right
-                (0.05, 0.85, 0.15, 0.95), # Bottom-left
-                (0.85, 0.85, 0.95, 0.95), # Bottom-right
-            ]
-        else:
-            # Original full screen capture
-            full_screen = ImageGrab.grab(bbox=(0, 0, screen_width, screen_height)).convert('RGB')
-            full_array = np.array(full_screen)
-            
-            # Original comprehensive sampling
-            sample_ratios = [
-                # Center (larger - most important area)
-                (0.4, 0.4, 0.6, 0.6),  # Center (20% of screen)
-                
-                # Corners
-                (0.01, 0.01, 0.08, 0.08),   # Top-left
-                (0.92, 0.01, 0.99, 0.08),   # Top-right
-                (0.01, 0.92, 0.08, 0.99),   # Bottom-left
-                (0.92, 0.92, 0.99, 0.99),   # Bottom-right
-                
-                # Mid-edges
-                (0.46, 0.01, 0.54, 0.08),   # Top-center
-                (0.46, 0.92, 0.54, 0.99),   # Bottom-center
-                (0.01, 0.46, 0.08, 0.54),   # Left-center
-                (0.92, 0.46, 0.99, 0.54),   # Right-center
-                
-                # Center-left and center-right
-                (0.3, 0.45, 0.38, 0.55),    # Center-left
-                (0.62, 0.45, 0.7, 0.55),    # Center-right
-                
-                # In-between diagonal points
-                (0.22, 0.22, 0.28, 0.28),   # Top-left quadrant
-                (0.72, 0.22, 0.78, 0.28),   # Top-right quadrant
-                (0.22, 0.72, 0.28, 0.78),   # Bottom-left quadrant
-                (0.72, 0.72, 0.78, 0.78),   # Bottom-right quadrant
-            ]
+        # Capture and downscale
+        full_screen = ImageGrab.grab(bbox=(0, 0, screen_width, screen_height)).convert('RGB')
+        analysis_screen = full_screen.resize(ANALYSIS_RESOLUTION, Image.LANCZOS)
+        full_array = np.array(analysis_screen)
+        
+        # Sample screen areas
+        sample_ratios = [
+            (0.4, 0.4, 0.6, 0.6),  # Center
+            (0.01, 0.01, 0.08, 0.08),   # Top-left
+            (0.92, 0.01, 0.99, 0.08),   # Top-right
+            (0.01, 0.92, 0.08, 0.99),   # Bottom-left
+            (0.92, 0.92, 0.99, 0.99),   # Bottom-right
+            (0.46, 0.01, 0.54, 0.08),   # Top-center
+            (0.46, 0.92, 0.54, 0.99),   # Bottom-center
+            (0.01, 0.46, 0.08, 0.54),   # Left-center
+            (0.92, 0.46, 0.99, 0.54),   # Right-center
+            (0.3, 0.45, 0.38, 0.55),    # Center-left
+            (0.62, 0.45, 0.7, 0.55),    # Center-right
+            (0.22, 0.22, 0.28, 0.28),   # Top-left quadrant
+            (0.72, 0.22, 0.78, 0.28),   # Top-right quadrant
+            (0.22, 0.72, 0.28, 0.78),   # Bottom-left quadrant
+            (0.72, 0.72, 0.78, 0.78),   # Bottom-right quadrant
+        ]
         
         all_luma_data = []
         
         for rx1, ry1, rx2, ry2 in sample_ratios:
-            # Convert percentages to actual pixel coordinates
-            if FAST_MODE:
-                # Use relative coordinates within the smaller captured area
-                x1 = int(rx1 * sample_width)
-                y1 = int(ry1 * sample_height)
-                x2 = int(rx2 * sample_width)
-                y2 = int(ry2 * sample_height)
-            else:
-                # Use full screen coordinates
-                x1, y1 = int(rx1 * screen_width), int(ry1 * screen_height)
-                x2, y2 = int(rx2 * screen_width), int(ry2 * screen_height)
+            x1, y1 = int(rx1 * screen_width), int(ry1 * screen_height)
+            x2, y2 = int(rx2 * screen_width), int(ry2 * screen_height)
             
             try:
-                # Extract region from full screen array
                 region_array = full_array[y1:y2, x1:x2]
-                
-                # Fast mode: sample every 2nd pixel for faster processing
-                if FAST_MODE and region_array.size > 1000:
-                    region_array = region_array[::2, ::2]
-                
-                # Calculate BT.709 luma for this region
                 r_channel = region_array[:, :, 0] / 255.0
                 g_channel = region_array[:, :, 1] / 255.0  
                 b_channel = region_array[:, :, 2] / 255.0
                 
                 luma_bt709 = 0.2126 * r_channel + 0.7152 * g_channel + 0.0722 * b_channel
-                
-                # Store luma data
                 all_luma_data.extend(luma_bt709.flatten())
-                
-            except Exception as e:
-                print(f"Warning: Could not extract region {x1,y1,x2,y2}: {e}")
+            except:
                 continue
         
-        # Convert to numpy array
-        if not all_luma_data:
-            raise Exception("No valid regions captured")
-        
         luma_array = np.array(all_luma_data)
-        
-        # Calculate overall luma
         luma = np.mean(luma_array)
-        
-        # Calculate contrast from luma
         contrast = np.std(luma_array)
         
-        # Fast mode: simplified percentile calculation
-        if FAST_MODE:
-            # Use min/max instead of percentiles for speed
-            min_luma = np.min(luma_array)
-            max_luma = np.max(luma_array)
-            highlight_ratio = np.sum(luma_array > 0.8) / luma_array.size
-            median_luma = np.median(luma_array)
-            shadow_ratio = np.sum(luma_array < 0.2) / luma_array.size
-        else:
-            # Original detailed analysis
-            percentiles = np.percentile(luma_array, [1, 5, 10, 90, 95, 99])
-            min_luma = percentiles[0]  # 1st percentile
-            max_luma = percentiles[5]  # 99th percentile
-            
-            # Additional metrics for better analysis
-            median_luma = np.median(luma_array)
-            p5_luma = percentiles[1]  # 5th percentile
-            p95_luma = percentiles[4] # 95th percentile
-            
-            # Calculate highlight ratio using luma
-            high_luma_mask = luma_array > 0.8
-            highlight_ratio = np.sum(high_luma_mask) / luma_array.size
-            
-            # Calculate shadow ratio for better scene analysis
-            shadow_luma_mask = luma_array < 0.2
-            shadow_ratio = np.sum(shadow_luma_mask) / luma_array.size
+        # Calculate analysis metrics
+        percentiles = np.percentile(luma_array, [1, 5, 10, 90, 95, 99])
+        min_luma = percentiles[0]
+        max_luma = percentiles[5]
+        median_luma = np.median(luma_array)
+        highlight_ratio = np.sum(luma_array > 0.8) / luma_array.size
+        shadow_ratio = np.sum(luma_array < 0.2) / luma_array.size
         
         return luma, contrast, min_luma, max_luma, highlight_ratio, median_luma, shadow_ratio
-    except Exception as e:
-        print(f"Error analyzing screen: {e}")
+    except:
         return 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5
 
 def calculate_targets(luma, contrast, min_luma, max_luma, highlight_ratio, median_luma, shadow_ratio):
@@ -1369,6 +1298,22 @@ def signal_handler(sig, frame):
 
 def main():
     global current_gamma, current_contrast, current_brightness, running
+    
+    # Check for administrator privileges
+    if not check_admin_privileges():
+        print("\n" + "="*60)
+        print("⚠️  WARNING: NOT RUNNING AS ADMINISTRATOR")
+        print("="*60)
+        print("\nScreenBooster requires Administrator privileges to modify")
+        print("display settings. Without admin rights, the screen adjustments")
+        print("will not work on most Windows systems.")
+        print("\nPlease:")
+        print("1. Right-click on ScreenBoosterV5.exe")
+        print("2. Select 'Run as administrator'")
+        print("3. Or rebuild the EXE with the updated build script")
+        print("\n" + "="*60)
+        print("\nContinuing anyway (adjustments will likely fail)...\n")
+        time.sleep(2)
     
     # Load profiles at startup
     load_profiles()

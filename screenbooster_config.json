@@ -1,6 +1,6 @@
 {
   "SMOOTHING": 0.1,
-  "REFRESH_RATE": 0.01,
+  "REFRESH_RATE": 0.001,
   "CONTENT_HISTORY_SIZE": 3,
   "FAST_MODE": true,
   "SKIP_FRAMES": 2,
