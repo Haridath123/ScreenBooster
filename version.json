@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "build_date": "2026-05-11T21:59:36.057107",
+  "build_type": "release",
+  "python_version": "3.14.3",
+  "files": [
+    "README.md",
+    "CONFIGURATION.md",
+    "main.py",
+    "requirements.txt"
+  ]
+}
