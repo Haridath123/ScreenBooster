@@ -9,6 +9,16 @@ from collections import deque
 import threading
 import keyboard
 
+def safe_input(prompt=""):
+    """Safe input function that handles missing stdin in windowed mode"""
+    try:
+        return input(prompt)
+    except (RuntimeError, EOFError):
+        # In windowed mode, show a simple dialog or return default
+        print(prompt)
+        print("Running in windowed mode - using default selection")
+        return "1"  # Default choice
+
 # Hardware access
 gdi32 = ctypes.WinDLL('gdi32')
 user32 = ctypes.windll.user32
@@ -130,10 +140,17 @@ GAMMA_STEP = 0.1
 CONTRAST_STEP = 0.05
 BRIGHTNESS_STEP = 0.05
 
-# Settings file path
-SETTINGS_FILE = "screenbooster_settings.json"
-CONFIG_FILE = "screenbooster_config.json"
-PROFILES_FILE = "screenbooster_profiles.json"
+# Settings file path - use the directory where the EXE is located
+import sys
+if getattr(sys, 'frozen', False):
+    # Running as compiled EXE
+    EXE_DIR = os.path.dirname(sys.executable)
+else:
+    # Running as Python script
+    EXE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+CONFIG_FILE = os.path.join(EXE_DIR, "screenbooster_config.json")
+PROFILES_FILE = os.path.join(EXE_DIR, "screenbooster_profiles.json")
 
 # Profile management
 current_profile_name = "game"
@@ -154,7 +171,7 @@ def switch_profile(profile_name):
         print(f"❌ Unknown profile: {profile_name}")
         return False
     
-    save_custom_settings()
+    save_profiles()
     return True
 
 def save_profiles():
@@ -166,11 +183,17 @@ def save_profiles():
     }
     
     try:
+        # Show the full path for debugging
+        full_path = os.path.abspath(PROFILES_FILE)
+        print(f"Attempting to save profiles to: {full_path}")
+        print(f"Current working directory: {os.getcwd()}")
+        
         with open(PROFILES_FILE, 'w') as f:
             json.dump(profiles_data, f, indent=2)
         print(f"Profiles saved to {PROFILES_FILE}")
     except Exception as e:
         print(f"Could not save profiles: {e}")
+        print(f"Error details - File: {PROFILES_FILE}, Working Dir: {os.getcwd()}")
 
 def load_profiles():
     """Load profiles from file"""
@@ -259,22 +282,22 @@ def profile_menu():
     """Handle profile management menu"""
     while True:
         show_profile_menu()
-        choice = input("\nEnter choice (0-4): ").strip()
+        choice = safe_input("\nEnter choice (0-4): ").strip()
         
         if choice == "0":
             break
         elif choice == "1":
             switch_profile("game")
-            input("Press Enter to continue...")
+            safe_input("Press Enter to continue...")
         elif choice == "2":
             switch_profile("movie")
-            input("Press Enter to continue...")
+            safe_input("Press Enter to continue...")
         elif choice == "3":
             save_profiles()
-            input("Press Enter to continue...")
+            safe_input("Press Enter to continue...")
         elif choice == "4":
             load_profiles()
-            input("Press Enter to continue...")
+            safe_input("Press Enter to continue...")
         else:
             print("Invalid choice")
     
@@ -366,7 +389,7 @@ def adjust_value_menu(current_value, min_val, max_val, step, name):
         print("5. Enter Custom Value")
         print("0. Done")
         
-        choice = input("\nEnter choice: ").strip()
+        choice = safe_input("\nEnter choice: ").strip()
         
         if choice == "1":
             current_value = min(max_val, current_value + step)
@@ -378,7 +401,7 @@ def adjust_value_menu(current_value, min_val, max_val, step, name):
             current_value = max(min_val, current_value - step * 10)
         elif choice == "5":
             try:
-                new_val = float(input(f"Enter new value ({min_val}-{max_val}): "))
+                new_val = float(safe_input(f"Enter new value ({min_val}-{max_val}): "))
                 if min_val <= new_val <= max_val:
                     current_value = new_val
                 else:
@@ -400,7 +423,7 @@ def config_menu():
     
     while True:
         show_config_menu()
-        choice = input("\nEnter choice (0-13): ").strip()
+        choice = safe_input("\nEnter choice (0-13): ").strip()
         
         if choice == "0":
             break
@@ -412,7 +435,7 @@ def config_menu():
             FAST_MODE = not FAST_MODE
             print(f"Fast Mode: {'ON' if FAST_MODE else 'OFF'}")
             print("Fast Mode captures smaller areas and uses simplified analysis")
-            input("Press Enter to continue...")
+            safe_input("Press Enter to continue...")
         elif choice == "4":
             SKIP_FRAMES = int(adjust_value_menu(SKIP_FRAMES, 0, 10, 1, "Skip Frames"))
         elif choice == "5":
@@ -432,7 +455,7 @@ def config_menu():
         elif choice == "12":
             BRIGHT_THRESHOLD = adjust_value_menu(BRIGHT_THRESHOLD, UPPER_MID_THRESHOLD + 0.01, 0.99, THRESHOLD_STEP, "Bright Threshold")
         elif choice == "13":
-            if input("Reset all configuration to defaults? (y/n): ").lower() == 'y':
+            if safe_input("Reset all configuration to defaults? (y/n): ").lower() == 'y':
                 reset_config()
         else:
             print("Invalid choice")
@@ -448,7 +471,7 @@ def scene_menu():
     
     while True:
         show_scene_menu()
-        choice = input("\nEnter choice (0-9): ").strip()
+        choice = safe_input("\nEnter choice (0-9): ").strip()
         
         if choice == "0":
             break
@@ -462,7 +485,7 @@ def scene_settings_menu(scene_type):
     """Handle settings for a specific scene"""
     while True:
         show_scene_settings(scene_type)
-        choice = input("\nEnter choice (0-4): ").strip()
+        choice = safe_input("\nEnter choice (0-4): ").strip()
         
         if choice == "0":
             break
@@ -479,7 +502,7 @@ def scene_settings_menu(scene_type):
                 custom_settings[scene_type]["brightness"], 0.1, 2.0, BRIGHTNESS_STEP, "Brightness"
             )
         elif choice == "4":
-            if input(f"Reset {scene_type} to defaults? (y/n): ").lower() == 'y':
+            if safe_input(f"Reset {scene_type} to defaults? (y/n): ").lower() == 'y':
                 defaults = {
                     "VERY_BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 0.96},
                     "VERY_DARK": {"gamma": 3.1, "contrast": 1.6, "brightness": 1.0},
@@ -496,7 +519,7 @@ def scene_settings_menu(scene_type):
         else:
             print("Invalid choice")
     
-    save_custom_settings()
+    save_profiles()
 
 def view_current_settings():
     """Display all current settings"""
@@ -523,11 +546,11 @@ def view_current_settings():
         print(f"  {scene_type}: γ{settings['gamma']:.2f} C{settings['contrast']:.2f} B{settings['brightness']:.2f}")
     
     print("="*60)
-    input("\nPress Enter to continue...")
+    safe_input("\nPress Enter to continue...")
 
 def reset_all_defaults():
     """Reset everything to defaults"""
-    if input("Reset ALL settings to defaults? (y/n): ").lower() == 'y':
+    if safe_input("Reset ALL settings to defaults? (y/n): ").lower() == 'y':
         reset_config()
         # Reset scene settings
         defaults = {
@@ -543,9 +566,9 @@ def reset_all_defaults():
         }
         global custom_settings
         custom_settings = defaults.copy()
-        save_custom_settings()
+        save_profiles()
         print("All settings reset to defaults")
-    input("Press Enter to continue...")
+    safe_input("Press Enter to continue...")
 
 def load_config():
     """Load configuration from file"""
@@ -594,11 +617,16 @@ def save_config():
     }
     
     try:
+        # Show the full path for debugging
+        full_path = os.path.abspath(CONFIG_FILE)
+        print(f"Attempting to save config to: {full_path}")
+        
         with open(CONFIG_FILE, 'w') as f:
             json.dump(config, f, indent=2)
         print(f"Configuration saved to {CONFIG_FILE}")
     except Exception as e:
         print(f"Could not save configuration: {e}")
+        print(f"Error details - File: {CONFIG_FILE}, Working Dir: {os.getcwd()}")
 
 def adjust_config_setting(setting_type, increase=True):
     """Adjust configuration settings"""
@@ -699,29 +727,6 @@ def adjust_config_setting(setting_type, increase=True):
     
     # Save configuration
     save_config()
-
-def load_custom_settings():
-    global custom_settings
-    try:
-        if os.path.exists(SETTINGS_FILE):
-            with open(SETTINGS_FILE, 'r') as f:
-                loaded = json.load(f)
-                # Merge with defaults
-                for scene_type, settings in loaded.items():
-                    if scene_type in custom_settings:
-                        custom_settings[scene_type].update(settings)
-                print(f"Custom settings loaded from {SETTINGS_FILE}")
-    except Exception as e:
-        print(f"Could not load settings: {e}")
-
-def save_custom_settings():
-    """Save custom settings to file"""
-    try:
-        with open(SETTINGS_FILE, 'w') as f:
-            json.dump(custom_settings, f, indent=2)
-        print(f"Custom settings saved to {SETTINGS_FILE}")
-    except Exception as e:
-        print(f"Could not save settings: {e}")
 
 def get_scene_type(luma, highlight_ratio, bright_in_dark=False, overall_bright=False, high_contrast=False, dark_with_highlights=False):
     """Advanced scene detection - 23 scene system with equal distribution"""
@@ -834,7 +839,7 @@ def adjust_current_setting(setting_type, increase=True):
         print(f"Brightness for {current_scene_type}: {new_value:.2f}")
     
     # Save settings
-    save_custom_settings()
+    save_profiles()
 
 def reset_config():
     """Reset configuration to defaults"""
@@ -934,10 +939,10 @@ def keyboard_listener():
                         "BRIGHT": {"gamma": 1.0, "contrast": 1.0, "brightness": 1.0}
                     }
                     print(f"🔄 ALL scenes reset to defaults!")
-                    save_custom_settings()
+                    save_profiles()
                     time.sleep(0.5)
                 elif keyboard.is_pressed('s') and not keyboard.is_pressed('ctrl'):
-                    save_custom_settings()
+                    save_profiles()
                     time.sleep(0.5)
                 elif keyboard.is_pressed('p') and not keyboard.is_pressed('shift'):
                     # Switch to game profile
@@ -1367,14 +1372,12 @@ def main():
     
     # Load profiles at startup
     load_profiles()
-    # Load custom settings at startup
-    load_custom_settings()
     # Load configuration at startup
     load_config()
     
     while True:
         show_menu()
-        choice = input("\nEnter choice (1-8): ").strip()
+        choice = safe_input("\nEnter choice (1-8): ").strip()
         
         if choice == "1":
             # Start ScreenBooster with keyboard controls

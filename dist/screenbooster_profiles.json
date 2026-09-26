@@ -200,7 +200,7 @@
     "UPPER_BRIGHT_MID": {
       "gamma": 1.0,
       "contrast": 1.0,
-      "brightness": 1.0
+      "brightness": 0.95
     },
     "LOWER_BRIGHT": {
       "gamma": 1.0,
@@ -223,5 +223,5 @@
       "brightness": 1.0
     }
   },
-  "current_profile": "movie"
+  "current_profile": "game"
 }
